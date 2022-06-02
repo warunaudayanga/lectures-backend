@@ -1,4 +1,4 @@
-import { AfterLoad, Column, Entity, Index, ManyToOne } from "typeorm";
+import { Column, Entity, Index, ManyToOne } from "typeorm";
 import { Course } from "./course.entity";
 import { ICourseModule } from "../interfaces";
 import { BaseEntity } from "../../../core/entity";
@@ -28,15 +28,10 @@ export class CourseModule extends BaseEntity implements ICourseModule {
     @ManyToOne(() => Course, (course) => course.modules)
     course?: Course;
 
-    code?: string;
-
-    @AfterLoad()
-    afterLoad(): void {
-        const dept = this.department;
-        const semester = this.semester;
-        const credits = String(this.credits).length === 1 ? `0${this.credits}` : this.credits;
-        const serial = this.serial;
-        const revised = this.revised ? "1" : "0";
-        this.code = `${dept}${semester}${credits}${serial}${revised}`;
-    }
+    @Column({
+        generatedType: "STORED",
+        asExpression:
+            "CONCAT(department, semester, IF(LENGTH(credits)=1, CONCAT(0, credits), credits), SERIAL, IF(revised, 1, 0))",
+    })
+    code: string;
 }

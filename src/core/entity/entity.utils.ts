@@ -5,7 +5,7 @@ import { EntityErrors } from "./entity.error.responses";
 import { ErrorType, Operation } from "./entity.enums";
 import { EntityResponses } from "./entity.responses";
 
-export class EntityFunctions {
+export class EntityUtils {
     public static handleError(e: IQueryError, entityName: string, uniqueFieldName?: string): void {
         switch (e.code) {
             case ErrorType.ER_NO_DEFAULT_FOR_FIELD:
@@ -25,6 +25,8 @@ export class EntityFunctions {
                 return EntityResponses.CREATED(entityName);
             case Operation.UPDATE:
                 return EntityResponses.UPDATE(entityName);
+            case Operation.SAVE:
+                return EntityResponses.SAVE(entityName);
             default:
                 return EntityResponses.SUCCESS;
         }

@@ -10,5 +10,5 @@ export const Pager = createParamDecorator((data: any, ctx: ExecutionContext): IP
         const take: number = t ? t : 10;
         return { take, skip: (page - 1) * take };
     }
-    return { skip: 0, take: 10 };
+    return {};
 });

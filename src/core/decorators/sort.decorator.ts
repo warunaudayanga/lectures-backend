@@ -4,7 +4,7 @@ import { ISort } from "../entity";
 export const Sorter = createParamDecorator((data: any, ctx: ExecutionContext): { order: ISort<any> } => {
     const req = ctx.switchToHttp().getRequest();
     const order: ISort<any> = {};
-    if (req.query?.sort) {
+    if (req.query?.sort && req.query?.sort !== "undefined") {
         const sortColumns = req.query.sort.split(",");
         sortColumns.forEach((column) => {
             const property: string[] = column.split(".");

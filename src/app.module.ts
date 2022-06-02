@@ -7,11 +7,13 @@ import { CommonModule } from "./modules/common";
 import configuration from "./core/config/configuration";
 import { AuthModule } from "./modules/auth/auth.module";
 import { LecturesModule } from "./modules/lectures/lectures.module";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
     imports: [
         ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
         CommonModule,
+        ScheduleModule.forRoot(),
         TypeOrmModule.forRoot({
             type: configuration().database.type as any,
             host: configuration().database.host,

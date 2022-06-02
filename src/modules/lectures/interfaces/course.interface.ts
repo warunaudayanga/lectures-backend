@@ -6,5 +6,5 @@ export interface ICourse {
     code: string;
     modules?: ICourseModule[];
     users?: IUser[];
-    courseString?: string;
+    courseString: string;
 }

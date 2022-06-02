@@ -8,6 +8,7 @@ import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../.
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
+import { relations } from "../../../core/config";
 
 @Controller(Prefix.ROLE)
 export class RoleController {
@@ -25,7 +26,7 @@ export class RoleController {
     @UseGuards(JwtAuthGuard)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<Role> {
-        return this.roleService.get(id);
+        return this.roleService.get(id, { relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -36,7 +37,7 @@ export class RoleController {
         @Sorter() sort: ISort<Role>,
         @Query("status") status: Status,
     ): Promise<IPaginatedResponse<Role>> {
-        return await this.roleService.getMany(status ? { status } : {}, { ...pagination, ...sort });
+        return await this.roleService.getMany(status ? { status } : {}, { ...pagination, ...sort }, { relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

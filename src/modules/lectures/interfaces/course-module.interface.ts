@@ -10,5 +10,5 @@ export interface ICourseModule extends IBaseEntity {
     serial: string;
     revised: boolean;
     course?: ICourse;
-    code?: string;
+    code: string;
 }

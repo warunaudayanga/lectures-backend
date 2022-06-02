@@ -9,17 +9,24 @@ import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../.
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
+import { relations } from "../../../core/config";
+import { CourseType } from "../enums";
 
 @Controller(Prefix.COURSE)
 export class CourseController {
     constructor(private courseService: CourseService) {}
+
+    @Get("types")
+    getCourseTypes(): string[] {
+        return Object.values(CourseType);
+    }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.COURSE_GET)
     @UseGuards(JwtAuthGuard)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<Course> {
-        return this.courseService.get(id, { relations: ["modules"] });
+        return this.courseService.get(id, { relations: ["modules", ...relations] });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -28,12 +35,13 @@ export class CourseController {
     async getAll(
         @Pager() pagination: IPagination,
         @Sorter() sort: ISort<Course>,
-        @Query("status") status: Status,
+        @Query("status") status?: Status,
+        @Query("keyword") keyword?: string,
     ): Promise<IPaginatedResponse<Course>> {
         return await this.courseService.getMany(
             status ? { status } : {},
-            { ...pagination, ...sort },
-            { relations: ["modules"] },
+            { ...pagination, ...sort, filter: { keyword, fields: ["name", "code"] } },
+            { relations: ["modules", ...relations] },
         );
     }
 

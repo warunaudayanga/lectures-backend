@@ -1,9 +1,12 @@
+// noinspection JSUnusedGlobalSymbols
+
 import {
     DeleteResult,
     FindConditions,
     FindManyOptions,
     FindOneOptions,
     In,
+    Like,
     ObjectLiteral,
     Repository,
     SaveOptions,
@@ -62,11 +65,26 @@ export class BaseRepository<Entity extends BaseEntity & ObjectLiteral> extends R
     }
 
     getMany(
-        where: FindOneOptions<Entity>["where"],
+        where?: FindManyOptions<Entity>["where"],
         queryOptions?: IQueryOptions<Entity>,
         options?: FindManyOptions<Entity>,
     ): Promise<[Entity[], number]> {
-        return super.findAndCount({ ...options, where, ...queryOptions });
+        const whArr = [];
+        const w = where ? where : ({} as FindOneOptions<Entity>["where"]);
+        let q = {};
+        if (queryOptions) {
+            const { filter, ...qOpts } = queryOptions;
+            q = qOpts;
+            if (filter) {
+                for (const field of filter.fields) {
+                    // @ts-ignore
+                    const wh = { ...w };
+                    wh[field as string] = Like(`%${filter.keyword}%`);
+                    whArr.push(wh);
+                }
+            }
+        }
+        return super.findAndCount({ ...options, where: whArr.length ? whArr : w, ...q });
     }
 
     delete(id: number): Promise<DeleteResult> {

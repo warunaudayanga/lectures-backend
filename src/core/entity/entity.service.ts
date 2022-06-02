@@ -2,7 +2,7 @@ import { BaseEntity } from "./base.entity";
 import { BaseRepository } from "./entity.repository";
 import { FindConditions, FindOneOptions, SaveOptions } from "typeorm";
 import { DeepPartial } from "typeorm/common/DeepPartial";
-import { EntityFunctions } from "./entity.functions";
+import { EntityUtils } from "./entity.utils";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { NotFoundException } from "@nestjs/common";
 import { IPaginatedResponse, IStatusResponse, IQueryOptions } from "./interfaces";
@@ -26,7 +26,7 @@ export abstract class EntityService<Entity extends BaseEntity> {
             const entity = await this.repository.save(createDto, options);
             return this.get(entity.id);
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -34,7 +34,7 @@ export abstract class EntityService<Entity extends BaseEntity> {
         try {
             return await this.repository.saveMany(createDto, options);
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -42,11 +42,11 @@ export abstract class EntityService<Entity extends BaseEntity> {
         try {
             const { affected } = await this.repository.update(id, updateDto);
             if (affected !== 0) {
-                return EntityFunctions.handleSuccess(Operation.UPDATE, this.entityName);
+                return EntityUtils.handleSuccess(Operation.UPDATE, this.entityName);
             }
             return Promise.reject(new NotFoundException(EntityErrors.E_404_ID(this.entityName)));
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -57,11 +57,11 @@ export abstract class EntityService<Entity extends BaseEntity> {
         try {
             const { affected } = await this.repository.updateOne(conditions, updateDto);
             if (affected !== 0) {
-                return EntityFunctions.handleSuccess(Operation.UPDATE, this.entityName);
+                return EntityUtils.handleSuccess(Operation.UPDATE, this.entityName);
             }
             return Promise.reject(new NotFoundException(EntityErrors.E_404_CONDITION(this.entityName)));
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -72,10 +72,10 @@ export abstract class EntityService<Entity extends BaseEntity> {
         try {
             const { affected } = await this.repository.updateMany(conditions, updateDto);
             if (affected !== 0) {
-                return EntityFunctions.handleSuccess(Operation.UPDATE, this.entityName);
+                return EntityUtils.handleSuccess(Operation.UPDATE, this.entityName);
             }
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -83,10 +83,10 @@ export abstract class EntityService<Entity extends BaseEntity> {
         try {
             const { affected } = await this.repository.updateByIds(ids, updateDto);
             if (affected !== 0) {
-                return EntityFunctions.handleSuccess(Operation.UPDATE, this.entityName);
+                return EntityUtils.handleSuccess(Operation.UPDATE, this.entityName);
             }
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -98,7 +98,7 @@ export abstract class EntityService<Entity extends BaseEntity> {
             }
             return Promise.reject(new NotFoundException(EntityErrors.E_404_ID(this.entityName)));
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -110,7 +110,7 @@ export abstract class EntityService<Entity extends BaseEntity> {
             }
             return Promise.reject(new NotFoundException(EntityErrors.E_404_CONDITION(this.entityName)));
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -123,8 +123,12 @@ export abstract class EntityService<Entity extends BaseEntity> {
             let [data, rowCount] = await this.repository.getMany(where, queryOptions, { relations, ...options });
             return { data, rowCount };
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
+    }
+
+    getWithoutPagination(where: FindOneOptions<Entity>["where"], options?: FindOneOptions<Entity>): Promise<Entity[]> {
+        return this.repository.find({ ...options, where });
     }
 
     async getAll(
@@ -135,7 +139,7 @@ export abstract class EntityService<Entity extends BaseEntity> {
             let [data, rowCount] = await this.repository.getMany({}, queryOptions, { relations, ...options });
             return { data, rowCount };
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -146,11 +150,11 @@ export abstract class EntityService<Entity extends BaseEntity> {
                 if (!wipe && deletedBy) {
                     await this.update(id, { deletedBy } as any);
                 }
-                return EntityFunctions.handleSuccess(Operation.DELETE, this.entityName);
+                return EntityUtils.handleSuccess(Operation.DELETE, this.entityName);
             }
             return Promise.reject(new NotFoundException(EntityErrors.E_404_ID(this.entityName)));
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 
@@ -163,11 +167,11 @@ export abstract class EntityService<Entity extends BaseEntity> {
                 if (!wipe && deletedBy) {
                     await this.updateByIds(ids, { deletedBy } as any);
                 }
-                return EntityFunctions.handleSuccess(Operation.DELETE, this.entityName);
+                return EntityUtils.handleSuccess(Operation.DELETE, this.entityName);
             }
             return Promise.reject(new NotFoundException(EntityErrors.E_404_ID(this.entityName)));
         } catch (e: any) {
-            EntityFunctions.handleError(e, this.entityName, this.uniqueFieldName);
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
         }
     }
 }

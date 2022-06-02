@@ -9,17 +9,31 @@ import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../.
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
+import { relations } from "../../../core/config";
+import { Department } from "../enums";
 
 @Controller(Prefix.COURSE_MODULE)
 export class CourseModuleController {
     constructor(private moduleService: CourseModuleService) {}
+
+    @Get("departments")
+    getDepartments(): string[] {
+        return Object.values(Department);
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.MODULE_GET)
+    @Get("all")
+    async getAllWithoutPagination(@Query("status") status: Status): Promise<CourseModule[]> {
+        return await this.moduleService.getWithoutPagination(status ? { status } : {}, { relations });
+    }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.MODULE_GET)
     @UseGuards(JwtAuthGuard)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<CourseModule> {
-        return this.moduleService.get(id);
+        return this.moduleService.get(id, { relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -29,8 +43,13 @@ export class CourseModuleController {
         @Pager() pagination: IPagination,
         @Sorter() sort: ISort<CourseModule>,
         @Query("status") status: Status,
+        @Query("keyword") keyword?: string,
     ): Promise<IPaginatedResponse<CourseModule>> {
-        return await this.moduleService.getMany(status ? { status } : {}, { ...pagination, ...sort });
+        return await this.moduleService.getMany(
+            status ? { status } : {},
+            { ...pagination, ...sort, filter: { keyword, fields: ["name"] } },
+            { relations },
+        );
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

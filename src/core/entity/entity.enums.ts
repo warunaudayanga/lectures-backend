@@ -6,5 +6,6 @@ export enum ErrorType {
 export enum Operation {
     CREATE = "CREATE",
     UPDATE = "UPDATE",
+    SAVE = "SAVE",
     DELETE = "DELETE",
 }

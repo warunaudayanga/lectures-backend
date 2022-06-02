@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToOne } from "typeorm";
+import { AfterLoad, Column, Entity, Index, ManyToOne } from "typeorm";
 import { Exclude } from "class-transformer";
 import { Role } from "./role.entity";
 import { IUser } from "../interfaces";
@@ -25,7 +25,7 @@ export class User extends BaseEntity implements IUser {
     @Exclude()
     salt: string;
 
-    @Column()
+    @Column({ nullable: true })
     profileImage?: string;
 
     @ManyToOne(() => Role, (role) => role.users)
@@ -33,4 +33,11 @@ export class User extends BaseEntity implements IUser {
 
     @ManyToOne(() => Course, (course) => course.users)
     course?: Course;
+
+    name: string;
+
+    @AfterLoad()
+    afterLoad(): void {
+        this.name = `${this.firstName} ${this.lastName}`;
+    }
 }

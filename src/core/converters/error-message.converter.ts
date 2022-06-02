@@ -1,6 +1,6 @@
 import { toJSON, toString } from "./json.converter";
 import { EntityErrorResponse } from "../entity";
-import { toFirstCase } from "../functions";
+import { toFirstCase, toSnakeCase } from "../utils";
 
 export const toErrString = (errObj: EntityErrorResponse): { message: string } => {
     return {
@@ -15,6 +15,8 @@ export const toErrorObject = (str: string): EntityErrorResponse => {
 export const applyTemplate = (str: string, prefix: string): string => {
     return str
         .replace("#{upperCase}", prefix.toUpperCase())
+        .replace("#{snakeCase}", toSnakeCase(prefix))
+        .replace("#{upperSnakeCase}", toSnakeCase(prefix, true))
         .replace("#{lowerCase}", prefix.toLowerCase())
         .replace("#{firstCase}", toFirstCase(prefix));
 };

@@ -38,5 +38,7 @@ export default () => ({
     },
     regex: {
         year: new RegExp(/^[1-9]\d{3,}$/),
+        time: new RegExp(/^([0-1]?\d|2[0-3])(?::([0-5]?\d))?(?::([0-5]?\d))?$/),
+        dateOnly: new RegExp(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/),
     },
 });

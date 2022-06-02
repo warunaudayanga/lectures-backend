@@ -1,4 +1,4 @@
-import { toFirstCase } from "../functions";
+import { toFirstCase } from "../utils";
 import { IStatusResponse } from "./interfaces";
 
 const EntityResponses = {
@@ -12,6 +12,12 @@ const EntityResponses = {
         return {
             status: true,
             message: `${toFirstCase(entityName)} updated successfully!`,
+        };
+    },
+    SAVE: (entityName: string): IStatusResponse => {
+        return {
+            status: true,
+            message: `${toFirstCase(entityName)} saved successfully!`,
         };
     },
     SUCCESS: {

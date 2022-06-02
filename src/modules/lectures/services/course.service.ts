@@ -15,7 +15,7 @@ export class CourseService extends EntityService<Course> {
         @InjectRepository(CourseRepository) private courseRepository: CourseRepository,
         private moduleService: CourseModuleService,
     ) {
-        super(courseRepository, "course", "code");
+        super(courseRepository, "course", "year and code");
     }
 
     async createCourse<T extends DeepPartial<Course>>(
@@ -23,7 +23,7 @@ export class CourseService extends EntityService<Course> {
         modules?: ICourseModule[] | number[],
         options?: SaveOptions,
     ): Promise<Course> {
-        let course = await this.courseRepository.save(createDto, options);
+        let course = await this.create(createDto, options);
         if (modules?.length) {
             await this.moduleService.updateByIds(
                 modules.map((m) => (typeof m === "object" ? m.id : m) as number),
@@ -45,6 +45,6 @@ export class CourseService extends EntityService<Course> {
                 { course },
             );
         }
-        return await super.update(id, updateDto);
+        return await this.update(id, updateDto);
     }
 }

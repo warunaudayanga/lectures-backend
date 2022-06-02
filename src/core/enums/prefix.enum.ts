@@ -7,4 +7,8 @@ export enum Prefix {
     COMMON = "common",
     COURSE = "course",
     COURSE_MODULE = "module",
+    LECTURER = "lecturer",
+    SLOT = "slot",
+    TIMETABLE = "timetable",
+    SCHEDULE = "schedule",
 }

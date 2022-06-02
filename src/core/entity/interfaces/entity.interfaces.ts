@@ -27,6 +27,10 @@ export interface IPagination {
 }
 
 export interface IQueryOptions<Entity> extends IPagination {
+    filter?: {
+        keyword: string;
+        fields: (keyof Entity)[];
+    };
     order?: ISort<Entity>;
 }
 
