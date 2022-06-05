@@ -11,4 +11,11 @@ export interface IUser extends IBaseEntity {
     profileImage?: string;
     role?: IRole;
     course?: ICourse;
+    studentId: number;
+    studentIdVerified: boolean;
+    phone?: string;
+    phoneVerified: boolean;
+    email?: string;
+    emailVerified: boolean;
+    name: string;
 }

@@ -2,18 +2,47 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query,
 import { PermissionGuard } from "../../../core/guards/permission.guard";
 import { ScheduleService } from "../services";
 import { Schedule } from "../entities";
-import { CreateScheduleDto, UpdateScheduleDto } from "../dtos";
+import { UpdateScheduleDto } from "../dtos";
 import { User } from "../../user/entities";
 import { Permission, Prefix, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
-import { relations } from "../../../core/config";
+import { relations as rel } from "../../../core/config";
+import { DateOnly } from "../../../core/interfaces";
+import { SaveScheduleListDto } from "../dtos/save-schedule-list.dto";
+
+const relations = [
+    "entry",
+    "module",
+    "lecturer",
+    "lecturerL2",
+    "entry.module",
+    "entry.lecturer",
+    "entry.lecturerL2",
+    "entry.slot",
+    "entry.slotL2",
+    ...rel,
+];
 
 @Controller(Prefix.SCHEDULE)
 export class ScheduleController {
     constructor(private scheduleService: ScheduleService) {}
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.TIMETABLE_GET)
+    @Get("by-date/:date")
+    async getByDate(@Param("date") date: DateOnly): Promise<{ schedule: Schedule[]; generated: boolean }> {
+        return await this.scheduleService.getByDate(date, { relations });
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.TIMETABLE_GET)
+    @Post("by-dates")
+    async getByDates(@Body("dates") dates: DateOnly[]): Promise<Map<DateOnly, Array<Schedule>>> {
+        return await this.scheduleService.getByDates(dates, { relations });
+    }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.SCHEDULE_GET)
@@ -31,15 +60,19 @@ export class ScheduleController {
         @Sorter() sort: ISort<Schedule>,
         @Query("status") status: Status,
     ): Promise<IPaginatedResponse<Schedule>> {
-        return await this.scheduleService.getMany(status ? { status } : {}, { ...pagination, ...sort }, { relations });
+        return await this.scheduleService.getMany(
+            status ? { status } : {},
+            { ...pagination, ...sort },
+            { relations: ["entry", ...relations] },
+        );
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.SCHEDULE_CREATE)
     @UseGuards(JwtAuthGuard)
     @Post()
-    create(@ReqUser() createdBy: User, @Body() createScheduleDto: CreateScheduleDto): Promise<Schedule> {
-        return this.scheduleService.create({ ...createScheduleDto, createdBy });
+    save(@ReqUser() createdBy: User, @Body() saveScheduleListDto: SaveScheduleListDto): Promise<Schedule[]> {
+        return this.scheduleService.save(saveScheduleListDto, createdBy);
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

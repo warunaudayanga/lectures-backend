@@ -9,6 +9,7 @@ export interface ICourseModule extends IBaseEntity {
     credits: number;
     serial: string;
     revised: boolean;
+    grouped: boolean;
     course?: ICourse;
     code: string;
 }

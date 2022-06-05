@@ -9,6 +9,7 @@ import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../.
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
+import { relations } from "../../../core/config";
 @Controller(Prefix.USER)
 export class UserController {
     constructor(private userService: UserService) {}
@@ -17,13 +18,13 @@ export class UserController {
     @Roles(Permission.USER_GET)
     @Get("get/:id")
     get(@Param("id", ParseIntPipe) id: number): Promise<User> {
-        return this.userService.get(id, { relations: ["role"] });
+        return this.userService.get(id, { relations: ["role", "course", ...relations] });
     }
 
     @UseGuards(JwtAuthGuard)
     @Get("me")
     getAuthUser(@ReqUser() user: User): Promise<User> {
-        return this.userService.get(user.id, { relations: ["role"] });
+        return this.userService.get(user.id, { relations: ["role", "course", ...relations] });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -34,7 +35,11 @@ export class UserController {
         @Sorter() sort: ISort<User>,
         @Query("status") status: Status,
     ): Promise<IPaginatedResponse<User>> {
-        return this.userService.getMany(status ? { status } : {}, { ...pagination, ...sort }, { relations: ["role"] });
+        return this.userService.getMany(
+            status ? { status } : {},
+            { ...pagination, ...sort },
+            { relations: ["role", "course", ...relations] },
+        );
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

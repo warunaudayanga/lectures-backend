@@ -28,7 +28,7 @@ export class Course extends BaseEntity implements ICourse {
 
     @Column({
         generatedType: "STORED",
-        asExpression: `CONCAT(code, '/', year, '/', IF(type='${CourseType.FULL_TIME}', 'B1', 'B2'))`,
+        asExpression: `CONCAT(code, '/', SUBSTRING(year, 3, 4), '/', IF(type='${CourseType.FULL_TIME}', 'B1', 'B2'))`,
     })
     courseString: string;
 }

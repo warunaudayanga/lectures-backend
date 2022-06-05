@@ -52,6 +52,6 @@ import { Course, CourseModule, Lecturer, Schedule, Slot, Timetable } from "./ent
         ScheduleController,
     ],
     providers: [CourseService, CourseModuleService, LecturerService, SlotService, TimetableService, ScheduleService],
-    exports: [],
+    exports: [CourseService],
 })
 export class LecturesModule {}

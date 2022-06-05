@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Timetable } from "../entities";
-import { EntityService, IStatusResponse } from "../../../core/entity";
+import { EntityService, EntityUtils, IStatusResponse } from "../../../core/entity";
 import { TimetableRepository } from "../repositories";
 import { groupBy } from "../../../core/utils/common.utils";
 import { Day } from "../../../core/enums";
@@ -16,11 +16,19 @@ export class TimetableService extends EntityService<Timetable> {
     }
 
     async getTimetable(options?: FindManyOptions<Timetable>): Promise<Map<Day, Array<Timetable>>> {
-        const [timetable] = await this.repository.getMany(undefined, undefined, options);
-        return groupBy(timetable, (entry) => entry.day);
+        try {
+            const [timetable] = await this.repository.getMany(undefined, undefined, options);
+            return groupBy(timetable, (entry) => entry.day);
+        } catch (e: any) {
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
+        }
     }
 
     async saveTimetable(saveTimetableDto: SaveTimetableDto, updatedBy: User): Promise<IStatusResponse> {
-        return await this.timetableRepository.saveBulk(saveTimetableDto, updatedBy);
+        try {
+            return await this.timetableRepository.saveBulk(saveTimetableDto, updatedBy);
+        } catch (e: any) {
+            EntityUtils.handleError(e, this.entityName, this.uniqueFieldName);
+        }
     }
 }

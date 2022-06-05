@@ -8,14 +8,32 @@ export class UpdateTimetableEntryDto {
     id: number;
 
     @IsOptional()
-    slot: ISlot;
+    slot?: ISlot;
 
     @IsOptional()
-    day: Day;
+    slotL2?: ISlot;
 
     @IsOptional()
-    lecturer: ILecturer;
+    day?: Day;
 
     @IsOptional()
-    module: ICourseModule;
+    lecturer?: ILecturer;
+
+    @IsOptional()
+    lecturerL2?: ILecturer;
+
+    @IsOptional()
+    module?: ICourseModule;
+
+    @IsOptional()
+    recordingsUrl?: string;
+
+    @IsOptional()
+    documentsUrl?: string;
+
+    @IsOptional()
+    recordingsUrlL2?: string;
+
+    @IsOptional()
+    documentsUrlL2?: string;
 }

@@ -24,4 +24,8 @@ export class UpdateCourseModuleDto extends BaseDto {
     @IsBoolean(toErrString(ModuleErrors.MODULE_400_INVALID_REVISED))
     @IsOptional()
     revised?: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    grouped?: boolean;
 }

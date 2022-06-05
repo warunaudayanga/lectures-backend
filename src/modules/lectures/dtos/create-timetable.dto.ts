@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, Matches } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, Matches } from "class-validator";
 import { BaseDto } from "../../../core/entity";
 import { Day } from "../../../core/enums";
 import { ICourse, ICourseModule, ILecturer } from "../interfaces";
@@ -16,6 +16,9 @@ export class CreateTimetableDto extends BaseDto {
     @IsNotEmpty()
     lecturer: ILecturer;
 
+    @IsOptional()
+    lecturerL2?: ILecturer;
+
     @Matches(configuration().regex.year)
     @IsNotEmpty()
     year: Year;
@@ -26,4 +29,19 @@ export class CreateTimetableDto extends BaseDto {
 
     @IsNotEmpty()
     slot: ISlot;
+
+    @IsOptional()
+    slotL2?: ISlot;
+
+    @IsOptional()
+    recordingsUrl?: string;
+
+    @IsOptional()
+    documentsUrl?: string;
+
+    @IsOptional()
+    recordingsUrlL2?: string;
+
+    @IsOptional()
+    documentsUrlL2?: string;
 }

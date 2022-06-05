@@ -25,6 +25,9 @@ export class CourseModule extends BaseEntity implements ICourseModule {
     @Column({ nullable: false })
     revised: boolean;
 
+    @Column({ nullable: false })
+    grouped: boolean;
+
     @ManyToOne(() => Course, (course) => course.modules)
     course?: Course;
 

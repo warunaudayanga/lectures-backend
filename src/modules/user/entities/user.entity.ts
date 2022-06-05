@@ -1,10 +1,12 @@
-import { AfterLoad, Column, Entity, Index, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, Unique } from "typeorm";
 import { Exclude } from "class-transformer";
 import { Role } from "./role.entity";
 import { IUser } from "../interfaces";
 import { Course } from "../../lectures/entities";
 import { BaseEntity } from "../../../core/entity";
 
+@Unique("COURSE_STUDENT_ID", ["course", "studentId"])
+@Unique("USERNAME", ["username"])
 @Entity({ name: "users" })
 export class User extends BaseEntity implements IUser {
     @Column({ length: 20, nullable: false })
@@ -13,7 +15,6 @@ export class User extends BaseEntity implements IUser {
     @Column({ length: 20, nullable: false })
     lastName: string;
 
-    @Index({ unique: true })
     @Column({ length: 50, nullable: false })
     username: string;
 
@@ -34,10 +35,33 @@ export class User extends BaseEntity implements IUser {
     @ManyToOne(() => Course, (course) => course.users)
     course?: Course;
 
+    @Column({ default: false })
+    courseVerified: boolean;
+
+    @Column({ nullable: false })
+    studentId: number;
+
+    @Column({ default: false })
+    studentIdVerified: boolean;
+
+    @Column({ nullable: true })
+    phone?: string;
+
+    @Column({ default: false })
+    phoneVerified: boolean;
+
+    @Column({ nullable: true })
+    email?: string;
+
+    @Column({ default: false })
+    emailVerified: boolean;
+
+    @Column({
+        generatedType: "STORED",
+        asExpression: "CONCAT(firstName, ' ', lastName)",
+    })
     name: string;
 
-    @AfterLoad()
-    afterLoad(): void {
-        this.name = `${this.firstName} ${this.lastName}`;
-    }
+    @Column()
+    studentIdString: string;
 }

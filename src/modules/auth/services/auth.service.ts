@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { ConflictException, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { join } from "path";
 import { readFileSync } from "fs";
 import { pbkdf2Sync, randomBytes } from "crypto";
@@ -12,6 +12,7 @@ import { User } from "../../user/entities";
 import { UserService } from "../../user/services";
 import { CreateUserDto } from "../../user/dtos";
 import { LoggerService } from "../../../core/services";
+import { EntityErrors, IQueryError } from "../../../core/entity";
 
 @Injectable()
 export class AuthService {
@@ -63,12 +64,19 @@ export class AuthService {
         const authData = AuthService.generatePassword(createUserDto.password);
         createUserDto.password = authData.password;
         createUserDto.salt = authData.salt;
-        return this.userService.create(createUserDto);
+        const eh = (e: IQueryError): Error | void => {
+            if (e.sqlMessage.match("users.USERNAME")) {
+                return new ConflictException(EntityErrors.E_409_EXIST_U("user", "username"));
+            } else if (e.sqlMessage.match("users.COURSE_STUDENT_ID")) {
+                return new ConflictException(EntityErrors.E_409_EXIST_U("user", "student id"));
+            }
+        };
+        return this.userService.create(createUserDto, undefined, eh);
     }
 
     async authenticate(authDataDto: AuthDataDto): Promise<TokenData> {
         try {
-            const user = await this.userService.getOne({ username: authDataDto.username });
+            const user = await this.userService.getOne({ username: authDataDto.username }, { relations: ["role"] });
             if (!user) {
                 return Promise.reject(new HttpException(AuthErrors.AUTH_401_INVALID, HttpStatus.UNAUTHORIZED));
             }

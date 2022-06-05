@@ -9,8 +9,10 @@ import { IPaginatedResponse, IStatusResponse } from "../../../core/entity";
 import { ReqUser, Roles } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
-import { relations } from "../../../core/config";
+import { relations as rel } from "../../../core/config";
 import { SaveTimetableDto } from "../dtos/save-timetable.dto";
+
+const relations = ["course", "module", "lecturer", "lecturerL2", "slot", "slotL2", ...rel];
 
 @Controller(Prefix.TIMETABLE)
 export class TimetableController {
@@ -25,18 +27,14 @@ export class TimetableController {
     @Roles(Permission.TIMETABLE_GET)
     @Get("by-day")
     async getByDay(@Query("day") day: Day): Promise<IPaginatedResponse<Timetable>> {
-        return await this.timetableService.getMany({ day }, null, {
-            relations: ["course", "module", "lecturer", "slot", ...relations],
-        });
+        return await this.timetableService.getMany({ day }, null, { relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.TIMETABLE_GET)
     @Get()
     async getAll(): Promise<Map<Day, Array<Timetable>>> {
-        return await this.timetableService.getTimetable({
-            relations: ["course", "module", "lecturer", "slot", ...relations],
-        });
+        return await this.timetableService.getTimetable({ relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -44,7 +42,7 @@ export class TimetableController {
     @UseGuards(JwtAuthGuard)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<Timetable> {
-        return this.timetableService.get(id, { relations: ["course", "module", "lecturer", "slot", ...relations] });
+        return this.timetableService.get(id, { relations });
     }
 
     // @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -73,7 +71,7 @@ export class TimetableController {
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.TIMETABLE_UPDATE)
     @Patch()
-    update(@ReqUser() updatedBy: User, @Body() saveTimetableDto: SaveTimetableDto): Promise<IStatusResponse> {
+    save(@ReqUser() updatedBy: User, @Body() saveTimetableDto: SaveTimetableDto): Promise<IStatusResponse> {
         return this.timetableService.saveTimetable(saveTimetableDto, updatedBy);
     }
 

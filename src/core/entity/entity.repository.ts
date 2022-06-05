@@ -61,7 +61,7 @@ export class BaseRepository<Entity extends BaseEntity & ObjectLiteral> extends R
         queryOptions?: IQueryOptions<Entity>,
         options?: FindManyOptions<Entity>,
     ): Promise<[Entity[], number]> {
-        return super.findAndCount({ where: In(ids), ...options, ...queryOptions });
+        return super.findAndCount({ where: { id: In(ids) }, ...options, ...queryOptions });
     }
 
     getMany(
@@ -79,6 +79,9 @@ export class BaseRepository<Entity extends BaseEntity & ObjectLiteral> extends R
                 for (const field of filter.fields) {
                     // @ts-ignore
                     const wh = { ...w };
+                    if (!filter.keyword || filter.keyword === "undefined") {
+                        filter.keyword = "";
+                    }
                     wh[field as string] = Like(`%${filter.keyword}%`);
                     whArr.push(wh);
                 }

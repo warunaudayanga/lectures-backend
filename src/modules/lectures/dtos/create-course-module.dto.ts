@@ -24,4 +24,8 @@ export class CreateCourseModuleDto extends BaseDto {
     @IsBoolean(toErrString(ModuleErrors.MODULE_400_INVALID_REVISED))
     @IsNotEmpty(toErrString(ModuleErrors.MODULE_400_EMPTY_REVISED))
     revised: boolean;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    grouped: boolean;
 }

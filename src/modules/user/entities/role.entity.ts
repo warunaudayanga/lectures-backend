@@ -10,7 +10,7 @@ export class Role extends BaseEntity implements IRole {
     @Column()
     name: string;
 
-    @Column({ type: "json" })
+    @Column("json")
     permissions?: Permission[];
 
     @OneToMany(() => User, (user) => user.role)

@@ -21,16 +21,16 @@ export class CourseController {
         return Object.values(CourseType);
     }
 
-    @UseGuards(JwtAuthGuard, PermissionGuard)
-    @Roles(Permission.COURSE_GET)
+    // @UseGuards(JwtAuthGuard, PermissionGuard)
+    // @Roles(Permission.COURSE_GET)
     @UseGuards(JwtAuthGuard)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<Course> {
         return this.courseService.get(id, { relations: ["modules", ...relations] });
     }
 
-    @UseGuards(JwtAuthGuard, PermissionGuard)
-    @Roles(Permission.COURSE_GET)
+    // @UseGuards(JwtAuthGuard, PermissionGuard)
+    // @Roles(Permission.COURSE_GET)
     @Get()
     async getAll(
         @Pager() pagination: IPagination,

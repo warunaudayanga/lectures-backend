@@ -6,18 +6,36 @@ import { ISlot } from "../interfaces/slot.interface";
 
 export class UpdateTimetableDto extends BaseDto {
     @IsOptional()
-    course: ICourse;
+    course?: ICourse;
 
     @IsOptional()
-    module: ICourseModule;
+    module?: ICourseModule;
 
     @IsOptional()
-    lecturer: ILecturer;
+    lecturer?: ILecturer;
+
+    @IsOptional()
+    lecturerL2?: ILecturer;
 
     @IsEnum(Object.values(Day))
     @IsOptional()
-    day: Day;
+    day?: Day;
 
     @IsOptional()
     slot?: ISlot;
+
+    @IsOptional()
+    slotL2?: ISlot;
+
+    @IsOptional()
+    recordingsUrl?: string;
+
+    @IsOptional()
+    documentsUrl?: string;
+
+    @IsOptional()
+    recordingsUrlL2?: string;
+
+    @IsOptional()
+    documentsUrlL2?: string;
 }
