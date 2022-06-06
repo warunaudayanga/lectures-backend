@@ -18,4 +18,5 @@ jobs:
         command: ls -a
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        privateKey: ${{ secrets.PRIVATE_KEY}}
+        password: root
+#        privateKey: ${{ secrets.PRIVATE_KEY}}
