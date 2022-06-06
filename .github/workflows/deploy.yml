@@ -17,10 +17,36 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Install Dependencies
       - run: npm install --legacy-peer-deps
+      - name: Build application
       - run: npm run build --if-present
 
+      - name: Copy dependencies to dev environment
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: node_modules/*
+          remote: ~/env/dev/api/source
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
 
+      - name: Copy source to dev environment
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: dist/*
+          remote: ~/env/dev/api/source
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+
+      - name: cd ~/env/dev/api/source/
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: ls -a
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
 
 #  deploy:
 #    runs-on: ubuntu-latest
