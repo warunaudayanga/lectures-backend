@@ -1,0 +1,19 @@
+on:
+  push:
+    branches: [ dev, test-workflow ]
+  pull_request:
+    branches: [ dev, test-workflow ]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+  - name: ls -a via ssh
+    uses: garygrossgarten/github-action-ssh@release
+    with:
+      command: ls -a
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      privateKey: ${{ secrets.PRIVATE_KEY}}
