@@ -20,6 +20,9 @@ jobs:
       - run: npm install --legacy-peer-deps
       - run: npm run build --if-present
 
+      - name: parent working directory
+        run: pwd
+
       - name: Copy dependencies to dev environment
         uses: garygrossgarten/github-action-scp@release
         with:
