@@ -39,24 +39,3 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           source: dist/*
           target: ~/env/dev/api/source
-
-#  deploy:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#
-#    - name: cd env/dev/api/lectures/
-#      uses: garygrossgarten/github-action-ssh@release
-#      with:
-#        command: ls -a
-#        host: ${{ secrets.HOST }}
-#        username: ${{ secrets.USERNAME }}
-#        password: ${{ secrets.PASSWORD }}
-#
-#    - name: git clone u://r/l --branch x
-#      uses: garygrossgarten/github-action-ssh@release
-#      with:
-#        command: ls -a
-#        host: ${{ secrets.HOST }}
-#        username: ${{ secrets.USERNAME }}
-#        password: ${{ secrets.PASSWORD }}
