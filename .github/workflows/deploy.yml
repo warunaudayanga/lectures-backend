@@ -10,10 +10,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-  - name: ls -a via ssh
-    uses: garygrossgarten/github-action-ssh@release
-    with:
-      command: ls -a
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      privateKey: ${{ secrets.PRIVATE_KEY}}
+    steps:
+
+    - name: ls -a via ssh
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: ls -a
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        privateKey: ${{ secrets.PRIVATE_KEY}}
