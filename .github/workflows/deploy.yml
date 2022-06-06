@@ -23,7 +23,7 @@ jobs:
       - name: Copy dependencies to dev environment
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: node_modules/*
+          local: /home/runner/work/lectures-backend/lectures-backend/node_modules/*
           remote: ~/env/dev/api/source
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -32,7 +32,7 @@ jobs:
       - name: Copy source to dev environment
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: dist/*
+          local: /home/runner/work/lectures-backend/lectures-backend/dist/*
           remote: ~/env/dev/api/source
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
