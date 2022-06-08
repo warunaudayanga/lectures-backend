@@ -27,7 +27,22 @@ import {
 import { Course, CourseModule, Lecturer, Schedule, Slot, Timetable } from "./entities";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Course, CourseModule, Lecturer, Slot, Timetable, Schedule])],
+    imports: [
+        TypeOrmModule.forFeature([
+            Course,
+            CourseModule,
+            Lecturer,
+            Slot,
+            Timetable,
+            Schedule,
+            CourseRepository,
+            CourseModuleRepository,
+            LecturerRepository,
+            SlotRepository,
+            TimetableRepository,
+            ScheduleRepository,
+        ]),
+    ],
     controllers: [
         CourseController,
         CourseModuleController,
@@ -36,20 +51,7 @@ import { Course, CourseModule, Lecturer, Schedule, Slot, Timetable } from "./ent
         TimetableController,
         ScheduleController,
     ],
-    providers: [
-        CourseService,
-        CourseModuleService,
-        LecturerService,
-        SlotService,
-        TimetableService,
-        ScheduleService,
-        CourseRepository,
-        CourseModuleRepository,
-        LecturerRepository,
-        SlotRepository,
-        TimetableRepository,
-        ScheduleRepository,
-    ],
+    providers: [CourseService, CourseModuleService, LecturerService, SlotService, TimetableService, ScheduleService],
     exports: [CourseService],
 })
 export class LecturesModule {}

@@ -7,9 +7,9 @@ import { RoleService, UserService } from "./services";
 import { LecturesModule } from "../lectures/lectures.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User, Role]), LecturesModule],
+    imports: [TypeOrmModule.forFeature([User, Role, UserRepository, RoleRepository]), LecturesModule],
     controllers: [UserController, RoleController],
-    providers: [UserService, RoleService, UserRepository, RoleRepository],
+    providers: [UserService, RoleService],
     exports: [UserService],
 })
 export class UserModule {}

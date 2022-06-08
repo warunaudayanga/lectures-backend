@@ -22,7 +22,7 @@ import { ScheduleModule } from "@nestjs/schedule";
             password: configuration().database.password,
             database: configuration().database.schema,
             charset: configuration().database.charset,
-            entities: ["dist/**/*.entity{.ts,.js}"],
+            entities: ["dist/**/*.entity{.ts,.js}", "dist/**/*.repository{.ts,.js}"],
             synchronize: configuration().database.synchronize,
             migrations: [".dist/migrations/*{.ts,.js}"],
             cli: { migrationsDir: "./migrations" },
