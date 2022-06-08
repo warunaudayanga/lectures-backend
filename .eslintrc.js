@@ -19,7 +19,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unsafe-return": "error",
@@ -100,13 +100,6 @@ module.exports = {
       "error",
       "beside"
     ],
-    "indent": [
-      "error",
-      4,
-      {
-        "SwitchCase": 1
-      }
-    ],
     "init-declarations": "off",
     "jsx-quotes": "error",
     "key-spacing": [
@@ -139,10 +132,7 @@ module.exports = {
     "max-params": "off",
     "max-statements": "off",
     "max-statements-per-line": "error",
-    "multiline-comment-style": [
-      "error",
-      "separate-lines"
-    ],
+    "multiline-comment-style": "off",
     "new-parens": "error",
     "newline-per-chained-call": "off",
     "no-alert": "error",
