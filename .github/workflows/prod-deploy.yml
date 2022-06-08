@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [ develop, test-workflow ]
+    branches: [ main ]
   pull_request:
-    branches: [ develop, test-workflow ]
+    branches: [ main ]
 
   workflow_dispatch:
 
@@ -21,7 +21,7 @@ jobs:
       - run: npm install --legacy-peer-deps
       - run: npm run build --if-present
 
-      - name: Copy API dependencies to development environment
+      - name: Copy API dependencies to production environment
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -29,16 +29,16 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           rm: true
           source: node_modules/*
-          target: ~/env/dev/lectures_backend
+          target: ~/env/prod/lectures_backend
 
-      - name: Copy source to development environment
+      - name: Copy source to production environment
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           source: dist/*
-          target: ~/env/dev/lectures_backend
+          target: ~/env/prod/lectures_backend
 
       - name: Restart Application
         uses: garygrossgarten/github-action-ssh@release
@@ -46,4 +46,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          command: sudo supervisorctl restart dev_lectures_backend_3000
+          command: sudo supervisorctl restart prod_lectures_backend_3000
