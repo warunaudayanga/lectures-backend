@@ -16,7 +16,7 @@ export default () => ({
         schema: process.env.DATABASE_SCHEMA,
         port: parseInt(process.env.DATABASE_PORT) || 3306,
         charset: "utf8mb4",
-        synchronize: process.env.DATABASE_SYNC === "true",
+        synchronize: process.env.DATABASE_SYNC === "true" || false,
         baseRelations: relations,
     },
     redis: {
