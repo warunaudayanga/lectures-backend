@@ -45,4 +45,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          command: sudo supervisorctl restart prod_lectures_backend_3000
+          command: sudo supervisorctl restart prod_lectures_backend_8080
