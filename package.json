@@ -31,7 +31,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/platform-socket.io": "^8.4.5",
     "@nestjs/schedule": "^2.0.1",
-    "@nestjs/typeorm": "^8.0.4",
+    "@nestjs/typeorm": "8.0.4",
     "@nestjs/websockets": "^8.4.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -47,7 +47,7 @@
     "rxjs": "^7.2.0",
     "socket.io": "^4.5.1",
     "tslog": "^3.3.3",
-    "typeorm": "^0.2.44"
+    "typeorm": "^0.2.45"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
