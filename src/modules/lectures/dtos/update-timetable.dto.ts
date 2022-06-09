@@ -1,31 +1,32 @@
 import { IsEnum, IsOptional } from "class-validator";
 import { BaseDto } from "../../../core/entity";
 import { Day } from "../../../core/enums";
-import { ICourse, ICourseModule, ILecturer } from "../interfaces";
-import { ISlot } from "../interfaces/slot.interface";
+import { ICourse } from "../interfaces";
+import { CourseModule, Lecturer, Slot } from "../entities";
 
+// noinspection JSUnusedGlobalSymbols
 export class UpdateTimetableDto extends BaseDto {
     @IsOptional()
     course?: ICourse;
 
     @IsOptional()
-    module?: ICourseModule;
+    module?: CourseModule;
 
     @IsOptional()
-    lecturer?: ILecturer;
+    lecturer?: Lecturer;
 
     @IsOptional()
-    lecturerL2?: ILecturer;
+    lecturerL2?: Lecturer;
 
     @IsEnum(Object.values(Day))
     @IsOptional()
     day?: Day;
 
     @IsOptional()
-    slot?: ISlot;
+    slot?: Slot;
 
     @IsOptional()
-    slotL2?: ISlot;
+    slotL2?: Slot;
 
     @IsOptional()
     recordingsUrl?: string;

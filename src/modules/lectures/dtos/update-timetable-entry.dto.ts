@@ -1,29 +1,28 @@
-import { ICourseModule, ILecturer } from "../interfaces";
 import { Day } from "../../../core/enums";
-import { ISlot } from "../interfaces/slot.interface";
 import { IsNotEmpty, IsOptional } from "class-validator";
+import { CourseModule, Lecturer, Slot } from "../entities";
 
 export class UpdateTimetableEntryDto {
     @IsNotEmpty()
     id: number;
 
     @IsOptional()
-    slot?: ISlot;
+    slot?: Slot;
 
     @IsOptional()
-    slotL2?: ISlot;
+    slotL2?: Slot;
 
     @IsOptional()
     day?: Day;
 
     @IsOptional()
-    lecturer?: ILecturer;
+    lecturer?: Lecturer;
 
     @IsOptional()
-    lecturerL2?: ILecturer;
+    lecturerL2?: Lecturer;
 
     @IsOptional()
-    module?: ICourseModule;
+    module?: CourseModule;
 
     @IsOptional()
     recordingsUrl?: string;

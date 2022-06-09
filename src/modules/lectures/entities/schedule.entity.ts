@@ -1,15 +1,26 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 import { ISchedule } from "../interfaces";
 import { DateOnly, Time } from "../../../core/interfaces";
 import { now } from "../../../core/utils";
 import { Timetable } from "./timetable.entity";
-import { BaseEntity } from "../../../core/entity";
-import { Day } from "../../../core/enums";
+import { Day, Status } from "../../../core/enums";
 import { Lecturer } from "./lecturer.entity";
 import { CourseModule } from "./course-module.entity";
+import { User } from "../../user/entities";
 
 @Entity({ name: "schedule" })
-export class Schedule extends BaseEntity implements ISchedule {
+export class Schedule implements ISchedule {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @ManyToOne(() => Timetable, { nullable: true })
     entry: Timetable;
 
@@ -81,4 +92,25 @@ export class Schedule extends BaseEntity implements ISchedule {
 
     @Column({ nullable: true })
     documentsUrlL2?: string;
+
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: User;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: User;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: User;
 }

@@ -1,10 +1,23 @@
-import { Column, Entity, Index } from "typeorm";
-import { BaseEntity } from "../../../core/entity";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    Index,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 import { Time } from "../../../core/interfaces";
 import { ISlot } from "../interfaces/slot.interface";
+import { Status } from "../../../core/enums";
+import { User } from "../../user/entities";
 
 @Entity({ name: "slots" })
-export class Slot extends BaseEntity implements ISlot {
+export class Slot implements ISlot {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Index({ unique: true })
     @Column({ nullable: false })
     number: number;
@@ -14,4 +27,25 @@ export class Slot extends BaseEntity implements ISlot {
 
     @Column("time", { nullable: false })
     endAt: Time;
+
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: User;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: User;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: User;
 }

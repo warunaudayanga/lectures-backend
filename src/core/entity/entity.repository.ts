@@ -14,10 +14,9 @@ import {
 import { DeepPartial } from "typeorm/common/DeepPartial";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
-import { IQueryOptions } from "./interfaces";
-import { BaseEntity } from "./base.entity";
+import { IBaseEntity, IQueryOptions } from "./interfaces";
 
-export class BaseRepository<Entity extends BaseEntity & ObjectLiteral> extends Repository<Entity> {
+export class BaseRepository<Entity extends IBaseEntity & ObjectLiteral> extends Repository<Entity> {
     save<T extends DeepPartial<Entity>>(entity: T, options?: SaveOptions): Promise<T & Entity> {
         return super.save(entity, options);
     }

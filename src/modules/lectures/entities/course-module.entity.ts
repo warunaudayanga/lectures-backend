@@ -1,11 +1,24 @@
-import { Column, Entity, Index, ManyToOne } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    Index,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 import { Course } from "./course.entity";
 import { ICourseModule } from "../interfaces";
-import { BaseEntity } from "../../../core/entity";
 import { Department } from "../enums";
+import { Status } from "../../../core/enums";
+import { User } from "../../user/entities";
 
 @Entity({ name: "modules" })
-export class CourseModule extends BaseEntity implements ICourseModule {
+export class CourseModule implements ICourseModule {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Column()
     name: string;
 
@@ -37,4 +50,25 @@ export class CourseModule extends BaseEntity implements ICourseModule {
             "CONCAT(department, semester, IF(LENGTH(credits)=1, CONCAT(0, credits), credits), SERIAL, IF(revised, 1, 0))",
     })
     code: string;
+
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: User;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: User;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: User;
 }

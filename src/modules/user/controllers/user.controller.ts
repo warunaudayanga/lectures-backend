@@ -3,7 +3,6 @@ import { User } from "../entities";
 import { UpdateUserDto, UpdateUserRoleDto } from "../dtos";
 import { UserService } from "../services";
 import { PermissionGuard } from "../../../core/guards/permission.guard";
-import { IUser } from "../interfaces";
 import { Permission, Prefix, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
@@ -47,7 +46,7 @@ export class UserController {
     @Patch(":id")
     update(@Param("id", ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<IStatusResponse> {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, salt, status, role, ...rest } = updateUserDto as IUser;
+        const { password, salt, status, role, ...rest } = updateUserDto as User;
         return this.userService.update(id, { ...rest });
     }
 

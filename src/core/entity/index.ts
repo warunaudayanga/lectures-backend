@@ -1,6 +1,5 @@
 export * from "./interfaces";
 export * from "./base.dto";
-export * from "./base.entity";
 export * from "./entity.enums";
 export * from "./entity.error.responses";
 export * from "./entity.utils";

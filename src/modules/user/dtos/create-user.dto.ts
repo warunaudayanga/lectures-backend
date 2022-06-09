@@ -1,7 +1,7 @@
 import { IsEmpty, IsNotEmpty, IsObject, IsOptional } from "class-validator";
 import { UserErrors } from "../responses";
-import { ICourse } from "../../lectures/interfaces";
 import { toErrString } from "../../../core/converters";
+import { Course } from "../../lectures/entities";
 
 export class CreateUserDto {
     @IsNotEmpty(toErrString(UserErrors.USER_400_EMPTY_FIRST_NAME))
@@ -24,5 +24,5 @@ export class CreateUserDto {
 
     @IsObject(toErrString(UserErrors.USER_400_INVALID_COURSE))
     @IsOptional()
-    course?: ICourse;
+    course?: Course;
 }

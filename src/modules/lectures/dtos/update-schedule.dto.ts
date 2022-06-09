@@ -1,19 +1,18 @@
 import { IsEnum, IsOptional, Matches } from "class-validator";
 import configuration from "../../../core/config/configuration";
 import { DateOnly } from "../../../core/interfaces";
-import { Timetable } from "../entities";
+import { Lecturer, Timetable } from "../entities";
 import { Day } from "../../../core/enums";
-import { ILecturer } from "../interfaces";
 
 export class UpdateScheduleDto {
     @IsOptional()
     entry?: Timetable;
 
     @IsOptional()
-    lecturer?: ILecturer;
+    lecturer?: Lecturer;
 
     @IsOptional()
-    lecturerL2?: ILecturer;
+    lecturerL2?: Lecturer;
 
     @IsEnum(Object.values(Day))
     @IsOptional()
