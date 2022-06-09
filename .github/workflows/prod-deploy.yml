@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          command: cd ~/env/prod/lectures_backend && sudo ts-node ./node_modules/typeorm/cli.js -f ./src/core/config/ormconfig-migrations.ts migration:run
+          command: cd ~/env/prod/lectures_backend && sudo ts-node ./node_modules/typeorm/cli.js -f ./dist/core/config/ormconfig-migrations.ts migration:run
 
       - name: Restart Application
         uses: garygrossgarten/github-action-ssh@release
