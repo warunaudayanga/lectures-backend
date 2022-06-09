@@ -19,7 +19,11 @@ async function bootstrap() {
     app.setGlobalPrefix("api");
     app.use(cookieParser());
     app.use(helmet());
-    app.enableCors();
+    app.enableCors({
+        allowedHeaders: ["content-type"],
+        origin: ["https://uovt.tk", "https://www.uovt.tk", "https://dev.uovt.tk"],
+        credentials: true,
+    });
     // app.setViewEngine("");
     await app.listen(process.env.PORT || 3000);
 }
