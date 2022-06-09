@@ -28,7 +28,7 @@ export class Slot implements ISlot {
     @Column("time", { nullable: false })
     endAt: Time;
 
-    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
     status: Status | string;
 
     @CreateDateColumn()
