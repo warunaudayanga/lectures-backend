@@ -31,7 +31,7 @@ export class Lecturer implements ILecturer {
     @Column()
     mobile: string;
 
-    @Column()
+    @Column({ nullable: true })
     profileImage: string;
 
     @Column({

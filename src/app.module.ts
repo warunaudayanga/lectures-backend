@@ -8,6 +8,7 @@ import configuration from "./core/config/configuration";
 import { AuthModule } from "./modules/auth/auth.module";
 import { LecturesModule } from "./modules/lectures/lectures.module";
 import { ScheduleModule } from "@nestjs/schedule";
+import { SeedingModule } from "./modules/seeding/seeding.module";
 
 @Module({
     imports: [
@@ -31,6 +32,7 @@ import { ScheduleModule } from "@nestjs/schedule";
             keepConnectionAlive: true,
             autoLoadEntities: true,
         }),
+        SeedingModule,
         AuthModule,
         LecturesModule,
     ],

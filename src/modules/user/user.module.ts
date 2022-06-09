@@ -10,6 +10,6 @@ import { LecturesModule } from "../lectures/lectures.module";
     imports: [TypeOrmModule.forFeature([User, Role, UserRepository, RoleRepository]), LecturesModule],
     controllers: [UserController, RoleController],
     providers: [UserService, RoleService],
-    exports: [UserService],
+    exports: [UserService, RoleService],
 })
 export class UserModule {}
