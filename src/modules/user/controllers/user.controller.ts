@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Query, UseGuards } from "@nestjs/common";
 import { User } from "../entities";
 import { UpdateUserDto, UpdateUserRoleDto } from "../dtos";
-import { UserService } from "../services";
+import { RoleService, UserService } from "../services";
 import { PermissionGuard } from "../../../core/guards/permission.guard";
 import { Permission, Prefix, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
@@ -9,9 +9,11 @@ import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
 import { relations } from "../../../core/config";
+import { DefaultRoles } from "../enums/default-roles.enum";
+import { Not } from "typeorm";
 @Controller(Prefix.USER)
 export class UserController {
-    constructor(private userService: UserService) {}
+    constructor(private readonly userService: UserService, private readonly roleService: RoleService) {}
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_GET)
@@ -29,13 +31,15 @@ export class UserController {
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_GET)
     @Get()
-    getAll(
+    async getAll(
         @Pager() pagination: IPagination,
         @Sorter() sort: ISort<User>,
         @Query("status") status: Status,
     ): Promise<IPaginatedResponse<User>> {
+        const role = await this.roleService.getOne({ name: DefaultRoles.SUPER_ADMIN });
+        const where = status ? { status } : {};
         return this.userService.getMany(
-            status ? { status } : {},
+            { ...where, role: Not(role.id) },
             { ...pagination, ...sort },
             { relations: ["role", "course", ...relations] },
         );
