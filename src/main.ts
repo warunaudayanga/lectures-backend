@@ -10,6 +10,7 @@ import helmet from "helmet";
 // eslint-disable-next-line func-style,@typescript-eslint/explicit-function-return-type
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+        cors: true,
         logger: new LoggerService(),
     });
     const { httpAdapter } = app.get(HttpAdapterHost);
@@ -19,11 +20,7 @@ async function bootstrap() {
     app.setGlobalPrefix("api");
     app.use(cookieParser());
     app.use(helmet());
-    app.enableCors({
-        allowedHeaders: ["content-type"],
-        origin: ["https://uovt.tk", "https://www.uovt.tk", "https://dev.uovt.tk"],
-        credentials: true,
-    });
+    app.enableCors();
     // app.setViewEngine("");
     await app.listen(process.env.PORT || 3000);
 }
