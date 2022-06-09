@@ -28,7 +28,7 @@ export class SeedingMiddleware implements NestMiddleware {
 
         const rolesDto: DeepPartial<Role>[] = [
             {
-                name: DefaultRoles.ADMIN,
+                name: DefaultRoles.SUPER_ADMIN,
                 permissions: Object.values(Permission),
                 status: Status.ACTIVE,
             },

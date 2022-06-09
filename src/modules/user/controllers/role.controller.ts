@@ -9,6 +9,8 @@ import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
 import { relations } from "../../../core/config";
+import { DefaultRoles } from "../enums/default-roles.enum";
+import { Not } from "typeorm";
 
 @Controller(Prefix.ROLE)
 export class RoleController {
@@ -32,12 +34,17 @@ export class RoleController {
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.ROLE_GET)
     @Get()
-    async getAll(
+    getAll(
         @Pager() pagination: IPagination,
         @Sorter() sort: ISort<Role>,
         @Query("status") status: Status,
     ): Promise<IPaginatedResponse<Role>> {
-        return await this.roleService.getMany(status ? { status } : {}, { ...pagination, ...sort }, { relations });
+        const where = status ? { status } : {};
+        return this.roleService.getMany(
+            { ...where, name: Not(DefaultRoles.SUPER_ADMIN) },
+            { ...pagination, ...sort },
+            { relations },
+        );
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
