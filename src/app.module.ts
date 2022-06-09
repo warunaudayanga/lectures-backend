@@ -8,6 +8,7 @@ import configuration from "./core/config/configuration";
 import { AuthModule } from "./modules/auth/auth.module";
 import { LecturesModule } from "./modules/lectures/lectures.module";
 import { ScheduleModule } from "@nestjs/schedule";
+import { SeedingModule } from "./modules/seeding/seeding.module";
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import { ScheduleModule } from "@nestjs/schedule";
         CommonModule,
         ScheduleModule.forRoot(),
         TypeOrmModule.forRoot({
-            type: configuration().database.type as any,
+            type: configuration().database.type as "mysql" | "mariadb",
             host: configuration().database.host,
             port: configuration().database.port,
             username: configuration().database.user,
@@ -23,14 +24,15 @@ import { ScheduleModule } from "@nestjs/schedule";
             database: configuration().database.schema,
             charset: configuration().database.charset,
             entities: ["dist/**/*.entity{.ts,.js}"],
-            synchronize: true,
-            migrations: ["./migrations/*{.ts,.js}"],
-            cli: { migrationsDir: "./migrations" },
+            synchronize: false,
+            migrations: ["src/migrations/*{.ts,.js}"],
+            cli: { migrationsDir: "src/migrations" },
             extra: { charset: configuration().database.charset },
             legacySpatialSupport: false,
             keepConnectionAlive: true,
             autoLoadEntities: true,
         }),
+        SeedingModule,
         AuthModule,
         LecturesModule,
     ],

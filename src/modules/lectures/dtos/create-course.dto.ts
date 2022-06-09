@@ -1,10 +1,10 @@
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, Matches } from "class-validator";
-import { ICourseModule } from "../interfaces";
 import { CourseErrors } from "../responses";
 import { BaseDto } from "../../../core/entity";
 import { toErrString } from "../../../core/converters";
 import configuration from "../../../core/config/configuration";
 import { CourseType } from "../enums";
+import { CourseModule } from "../entities";
 
 export class CreateCourseDto extends BaseDto {
     @IsNotEmpty(toErrString(CourseErrors.COURSE_400_EMPTY_NAME))
@@ -23,5 +23,5 @@ export class CreateCourseDto extends BaseDto {
 
     @IsArray(toErrString(CourseErrors.COURSE_400_INVALID_MODULES))
     @IsOptional()
-    modules?: ICourseModule[] | number[];
+    modules?: CourseModule[] | number[];
 }

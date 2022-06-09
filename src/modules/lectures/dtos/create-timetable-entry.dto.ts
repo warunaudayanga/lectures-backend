@@ -1,27 +1,26 @@
-import { ICourseModule, ILecturer } from "../interfaces";
 import { Day } from "../../../core/enums";
-import { ISlot } from "../interfaces/slot.interface";
 import { IsEmpty, IsNotEmpty, IsOptional } from "class-validator";
-import { IUser } from "../../user/interfaces";
+import { CourseModule, Lecturer, Slot } from "../entities";
+import { User } from "../../user/entities";
 
 export class CreateTimetableEntryDto {
     @IsNotEmpty()
-    slot: ISlot;
+    slot: Slot;
 
     @IsOptional()
-    slotL2: ISlot;
+    slotL2: Slot;
 
     @IsNotEmpty()
     day: Day;
 
     @IsNotEmpty()
-    lecturer: ILecturer;
+    lecturer: Lecturer;
 
     @IsOptional()
-    lecturerL2: ILecturer;
+    lecturerL2: Lecturer;
 
     @IsNotEmpty()
-    module: ICourseModule;
+    module: CourseModule;
 
     @IsOptional()
     recordingsUrl?: string;
@@ -36,5 +35,5 @@ export class CreateTimetableEntryDto {
     documentsUrlL2?: string;
 
     @IsEmpty()
-    createdBy: IUser;
+    createdBy: User;
 }

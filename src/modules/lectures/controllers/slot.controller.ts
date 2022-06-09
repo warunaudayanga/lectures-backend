@@ -2,13 +2,14 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query,
 import { PermissionGuard } from "../../../core/guards/permission.guard";
 import { CreateSlotDto, UpdateSlotDto } from "../dtos";
 import { SlotService } from "../services";
-import { Slot } from "../entities";
+import { CourseModule, Slot } from "../entities";
 import { User } from "../../user/entities";
 import { Permission, Prefix, Status } from "../../../core/enums";
-import { IStatusResponse } from "../../../core/entity";
-import { ReqUser, Roles } from "../../../core/decorators";
+import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
+import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
+import { relations } from "../../../core/config";
 
 @Controller(Prefix.SLOT)
 export class SlotController {
@@ -17,8 +18,8 @@ export class SlotController {
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.SLOT_GET)
     @Get("all")
-    async getAll(@Query("status") status: Status): Promise<Slot[]> {
-        return await this.slotService.getWithoutPagination(status ? { status } : {});
+    async getAllWithoutPagination(@Query("status") status: Status): Promise<Slot[]> {
+        return await this.slotService.getWithoutPagination(status ? { status } : {}, { relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -27,6 +28,17 @@ export class SlotController {
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<Slot> {
         return this.slotService.get(id);
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.SLOT_GET)
+    @Get()
+    async getAll(
+        @Pager() pagination: IPagination,
+        @Sorter() sort: ISort<CourseModule>,
+        @Query("status") status: Status,
+    ): Promise<IPaginatedResponse<Slot>> {
+        return await this.slotService.getMany(status ? { status } : {}, { ...pagination, ...sort }, { relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

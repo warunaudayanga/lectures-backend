@@ -12,6 +12,7 @@ export interface IUser extends IBaseEntity {
     role?: IRole;
     course?: ICourse;
     studentId: number;
+    studentIdString: string;
     studentIdVerified: boolean;
     phone?: string;
     phoneVerified: boolean;

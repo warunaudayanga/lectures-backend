@@ -1,14 +1,26 @@
-import { Column, Entity, ManyToOne, Unique } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Unique,
+    UpdateDateColumn,
+} from "typeorm";
 import { Exclude } from "class-transformer";
 import { Role } from "./role.entity";
 import { IUser } from "../interfaces";
 import { Course } from "../../lectures/entities";
-import { BaseEntity } from "../../../core/entity";
+import { Status } from "../../../core/enums";
 
 @Unique("COURSE_STUDENT_ID", ["course", "studentId"])
 @Unique("USERNAME", ["username"])
 @Entity({ name: "users" })
-export class User extends BaseEntity implements IUser {
+export class User implements IUser {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Column({ length: 20, nullable: false })
     firstName: string;
 
@@ -64,4 +76,25 @@ export class User extends BaseEntity implements IUser {
 
     @Column()
     studentIdString: string;
+
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: any;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: any;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: any;
 }

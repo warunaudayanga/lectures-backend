@@ -1,11 +1,23 @@
-import { Entity, Column, OneToMany, Index } from "typeorm";
+import {
+    Entity,
+    Column,
+    OneToMany,
+    Index,
+    CreateDateColumn,
+    ManyToOne,
+    UpdateDateColumn,
+    DeleteDateColumn,
+    PrimaryGeneratedColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { IRole } from "../interfaces";
-import { Permission } from "../../../core/enums";
-import { BaseEntity } from "../../../core/entity";
+import { Permission, Status } from "../../../core/enums";
 
 @Entity({ name: "roles" })
-export class Role extends BaseEntity implements IRole {
+export class Role implements IRole {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Index({ unique: true })
     @Column()
     name: string;
@@ -15,4 +27,25 @@ export class Role extends BaseEntity implements IRole {
 
     @OneToMany(() => User, (user) => user.role)
     users?: User[];
+
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: User;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: User;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: User;
 }

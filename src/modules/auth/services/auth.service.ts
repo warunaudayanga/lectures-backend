@@ -9,10 +9,12 @@ import { AuthDataDto } from "../dtos";
 import { TokenData } from "../interfaces";
 import { AuthErrors } from "../responses";
 import { User } from "../../user/entities";
-import { UserService } from "../../user/services";
+import { RoleService, UserService } from "../../user/services";
 import { CreateUserDto } from "../../user/dtos";
 import { LoggerService } from "../../../core/services";
 import { EntityErrors, IQueryError } from "../../../core/entity";
+import { Status } from "../../../core/enums";
+import { DefaultRoles } from "../../user/enums/default-roles.enum";
 
 @Injectable()
 export class AuthService {
@@ -24,7 +26,11 @@ export class AuthService {
 
     public static EXPIRES_IN = 60 * 60 * 24;
 
-    constructor(private readonly userService: UserService, private jwtService: JwtService) {}
+    constructor(
+        private readonly userService: UserService,
+        private roleService: RoleService,
+        private jwtService: JwtService,
+    ) {}
 
     public static getPrivateKey(): string {
         return AuthService.PRV_KEY;
@@ -60,10 +66,11 @@ export class AuthService {
         };
     };
 
-    registerUser(createUserDto: CreateUserDto): Promise<User> {
+    async registerUser(createUserDto: CreateUserDto): Promise<User> {
         const authData = AuthService.generatePassword(createUserDto.password);
         createUserDto.password = authData.password;
         createUserDto.salt = authData.salt;
+        const role = await this.roleService.getOne({ name: DefaultRoles.STUDENT });
         const eh = (e: IQueryError): Error | void => {
             if (e.sqlMessage.match("users.USERNAME")) {
                 return new ConflictException(EntityErrors.E_409_EXIST_U("user", "username"));
@@ -71,7 +78,7 @@ export class AuthService {
                 return new ConflictException(EntityErrors.E_409_EXIST_U("user", "student id"));
             }
         };
-        return this.userService.create(createUserDto, undefined, eh);
+        return this.userService.create({ ...createUserDto, role, status: Status.ACTIVE }, undefined, eh);
     }
 
     async authenticate(authDataDto: AuthDataDto): Promise<TokenData> {

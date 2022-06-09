@@ -1,7 +1,7 @@
 import { IsEmpty, IsObject, IsOptional } from "class-validator";
 import { UserErrors } from "../responses";
-import { ICourse } from "../../lectures/interfaces";
 import { toErrString } from "../../../core/converters";
+import { Course } from "../../lectures/entities";
 
 export class UpdateUserDto {
     @IsOptional()
@@ -18,5 +18,5 @@ export class UpdateUserDto {
 
     @IsObject(toErrString(UserErrors.USER_400_INVALID_COURSE))
     @IsOptional()
-    course?: ICourse;
+    course?: Course;
 }
