@@ -40,6 +40,14 @@ jobs:
           source: dist/*
           target: ~/env/dev/lectures_backend
 
+      - name: Run Migrations
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          command: cd ~/env/dev/lectures_backend && sudo ts-node ./node_modules/typeorm/cli.js -f ./src/core/config/ormconfig-migrations.ts npm run typeorm:cli migration:run
+
       - name: Restart Application
         uses: garygrossgarten/github-action-ssh@release
         with:

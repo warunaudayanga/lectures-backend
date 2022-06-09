@@ -2,4 +2,4 @@
 .eslintrc.js
 README.md
 errors.json
-/database
+/migrations
