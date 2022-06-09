@@ -40,6 +40,31 @@ jobs:
           source: dist/*
           target: ~/env/dev/lectures_backend
 
+      - name: Copy migrations to development environment
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: migrations/*
+          target: ~/env/dev/lectures_backend
+
+      - name: Copy.env
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          command: cp ~/env/dev/dev_lectures_backend.env ~/env/dev/lectures_backend/.env
+
+      - name: Run Migrations
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          command: cd ~/env/dev/lectures_backend && sudo ts-node ./node_modules/typeorm/cli.js -f ./dist/core/config/ormconfig-migrations.js migration:run
+
       - name: Restart Application
         uses: garygrossgarten/github-action-ssh@release
         with:

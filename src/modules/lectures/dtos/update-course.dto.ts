@@ -4,7 +4,7 @@ import { BaseDto } from "../../../core/entity";
 import { toErrString } from "../../../core/converters";
 import configuration from "../../../core/config/configuration";
 import { CourseType } from "../enums";
-import { ICourseModule } from "../interfaces";
+import { CourseModule } from "../entities";
 
 export class UpdateCourseDto extends BaseDto {
     @IsOptional()
@@ -23,5 +23,5 @@ export class UpdateCourseDto extends BaseDto {
 
     @IsArray(toErrString(CourseErrors.COURSE_400_INVALID_MODULES))
     @IsOptional()
-    modules?: ICourseModule[] | number[];
+    modules?: CourseModule[] | number[];
 }

@@ -1,3 +1,4 @@
+// noinspection JSUnusedGlobalSymbols
 const SlotErrors = {
     SLOT_400_EMPTY_ID: {
         status: 400,

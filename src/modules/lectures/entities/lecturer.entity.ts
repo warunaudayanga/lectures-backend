@@ -1,10 +1,21 @@
-import { Column, Entity } from "typeorm";
-import { BaseEntity } from "../../../core/entity";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 import { ILecturer } from "../interfaces";
-import { Title } from "../../../core/enums";
+import { Status, Title } from "../../../core/enums";
+import { User } from "../../user/entities";
 
 @Entity({ name: "lecturer" })
-export class Lecturer extends BaseEntity implements ILecturer {
+export class Lecturer implements ILecturer {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Column({ type: "enum", enum: Title, nullable: false })
     title: Title;
 
@@ -20,7 +31,7 @@ export class Lecturer extends BaseEntity implements ILecturer {
     @Column()
     mobile: string;
 
-    @Column()
+    @Column({ nullable: true })
     profileImage: string;
 
     @Column({
@@ -28,4 +39,25 @@ export class Lecturer extends BaseEntity implements ILecturer {
         asExpression: "CONCAT(title, ' ', firstName, ' ', lastName)",
     })
     name: string;
+
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: User;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: User;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: User;
 }

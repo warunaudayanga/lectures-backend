@@ -1,18 +1,17 @@
-import { BaseEntity } from "./base.entity";
 import { BaseRepository } from "./entity.repository";
 import { FindConditions, FindManyOptions, FindOneOptions, SaveOptions } from "typeorm";
 import { DeepPartial } from "typeorm/common/DeepPartial";
 import { EntityUtils } from "./entity.utils";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { NotFoundException } from "@nestjs/common";
-import { IPaginatedResponse, IStatusResponse, IQueryOptions, IQueryError } from "./interfaces";
+import { IPaginatedResponse, IStatusResponse, IQueryOptions, IQueryError, IBaseEntity } from "./interfaces";
 import { Operation } from "./entity.enums";
 import { EntityErrors } from "./entity.error.responses";
 import { relations } from "../config";
 import { User } from "../../modules/user/entities";
 
 // noinspection JSUnusedGlobalSymbols
-export abstract class EntityService<Entity extends BaseEntity> {
+export abstract class EntityService<Entity extends IBaseEntity> {
     protected constructor(
         protected readonly repository: BaseRepository<Entity>,
         protected readonly entityName: string,

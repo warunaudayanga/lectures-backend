@@ -1,13 +1,26 @@
-import { Column, Entity, OneToMany, Unique } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    Unique,
+    UpdateDateColumn,
+} from "typeorm";
 import { CourseModule } from "./course-module.entity";
 import { ICourse } from "../interfaces";
 import { User } from "../../user/entities";
-import { BaseEntity } from "../../../core/entity";
 import { CourseType } from "../enums";
+import { Status } from "../../../core/enums";
 
 @Unique(["code", "year", "type"])
 @Entity({ name: "courses" })
-export class Course extends BaseEntity implements ICourse {
+export class Course implements ICourse {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Column()
     name: string;
 
@@ -31,4 +44,25 @@ export class Course extends BaseEntity implements ICourse {
         asExpression: `CONCAT(code, '/', SUBSTRING(year, 3, 4), '/', IF(type='${CourseType.FULL_TIME}', 'B1', 'B2'))`,
     })
     courseString: string;
+
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: User;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: User;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: User;
 }

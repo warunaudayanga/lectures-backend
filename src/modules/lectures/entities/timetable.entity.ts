@@ -1,15 +1,27 @@
-import { Column, Entity, ManyToOne, Unique } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Unique,
+    UpdateDateColumn,
+} from "typeorm";
 import { Day, Status } from "../../../core/enums";
 import { Course } from "./course.entity";
 import { CourseModule } from "./course-module.entity";
 import { Lecturer } from "./lecturer.entity";
 import { Slot } from "./slot.entity";
-import { BaseEntity } from "../../../core/entity";
 import { ITimetable } from "../interfaces";
+import { User } from "../../user/entities";
 
 @Unique(["day", "slot"])
 @Entity({ name: "timetable" })
-export class Timetable extends BaseEntity implements ITimetable {
+export class Timetable implements ITimetable {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @ManyToOne(() => Course, { nullable: true })
     course: Course;
 
@@ -45,4 +57,22 @@ export class Timetable extends BaseEntity implements ITimetable {
 
     @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
     status: Status | string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @ManyToOne(() => User)
+    createdBy: User;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    updatedBy?: User;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
+
+    @ManyToOne(() => User)
+    deletedBy?: User;
 }
