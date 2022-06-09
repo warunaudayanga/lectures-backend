@@ -9,9 +9,9 @@ export const config: TypeOrmModuleOptions = {
     password: configuration().database.password,
     database: configuration().database.schema,
     entities: ["dist/**/*.entity{.ts,.js}"],
-    migrations: ["database/migrations/*{.ts,.js}"],
+    migrations: ["./migrations/*{.ts,.js}"],
     cli: {
-        migrationsDir: "database/migrations",
+        migrationsDir: "./migrations",
     },
     synchronize: false,
     legacySpatialSupport: false,
