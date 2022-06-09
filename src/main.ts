@@ -5,7 +5,7 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 import * as cookieParser from "cookie-parser";
 import { AllExceptionsFilter } from "./core/filters";
 import { LoggerService } from "./core/services";
-// import helmet from "helmet";
+import helmet from "helmet";
 
 // eslint-disable-next-line func-style,@typescript-eslint/explicit-function-return-type
 async function bootstrap() {
@@ -19,8 +19,8 @@ async function bootstrap() {
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.setGlobalPrefix("api");
     app.use(cookieParser());
-    // app.use(helmet());
-    // app.enableCors();
+    app.use(helmet());
+    app.enableCors();
     // app.setViewEngine("");
     await app.listen(process.env.PORT || 3000);
 }
