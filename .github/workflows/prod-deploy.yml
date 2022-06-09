@@ -48,6 +48,14 @@ jobs:
           source: migrations/*
           target: ~/env/prod/lectures_backend
 
+      - name: Copy.env
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          command: cp ~/env/prod/prod_lectures_backend.env ~/env/prod/lectures_backend/.env
+
       - name: Run Migrations
         uses: garygrossgarten/github-action-ssh@release
         with:
