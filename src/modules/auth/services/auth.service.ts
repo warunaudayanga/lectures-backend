@@ -57,7 +57,7 @@ export class AuthService {
 
     public issueJWT = (user: User): { expires: number; token: string } => {
         const id = user.id;
-        const expiresIn = 60 * 60 * 24;
+        const expiresIn = 20;
         const payload = { sub: id, iat: Date.now() };
         const accessToken = this.jwtService.sign(payload, { expiresIn, algorithm: "RS256" });
         return {

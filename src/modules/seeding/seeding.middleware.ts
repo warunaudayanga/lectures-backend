@@ -30,16 +30,31 @@ export class SeedingMiddleware implements NestMiddleware {
             {
                 name: DefaultRoles.SUPER_ADMIN,
                 permissions: Object.values(Permission),
+                priority: 1,
+                status: Status.ACTIVE,
+            },
+            {
+                name: DefaultRoles.ADMIN,
+                permissions: Object.values([Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET]),
+                priority: 2,
+                status: Status.ACTIVE,
+            },
+            {
+                name: DefaultRoles.MODERATOR,
+                permissions: [Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET],
+                priority: 3,
                 status: Status.ACTIVE,
             },
             {
                 name: DefaultRoles.REPRESENTATIVE,
                 permissions: [Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET],
+                priority: 4,
                 status: Status.ACTIVE,
             },
             {
                 name: DefaultRoles.STUDENT,
                 permissions: [Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET],
+                priority: 10,
                 status: Status.ACTIVE,
             },
         ];

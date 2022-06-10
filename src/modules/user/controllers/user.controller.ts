@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { User } from "../entities";
-import { UpdateUserDto, UpdateUserRoleDto } from "../dtos";
+import { CreateUserDto, UpdateUserDto, UpdateUserRoleDto } from "../dtos";
 import { RoleService, UserService } from "../services";
 import { PermissionGuard } from "../../../core/guards/permission.guard";
 import { Permission, Prefix, Status } from "../../../core/enums";
@@ -11,15 +11,20 @@ import { JwtAuthGuard } from "../../../core/guards";
 import { relations } from "../../../core/config";
 import { DefaultRoles } from "../enums/default-roles.enum";
 import { Not } from "typeorm";
+import { AuthService } from "../../auth/services";
 @Controller(Prefix.USER)
 export class UserController {
-    constructor(private readonly userService: UserService, private readonly roleService: RoleService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly userService: UserService,
+        private readonly roleService: RoleService,
+    ) {}
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
-    @Roles(Permission.USER_GET)
-    @Get("get/:id")
-    get(@Param("id", ParseIntPipe) id: number): Promise<User> {
-        return this.userService.get(id, { relations: ["role", "course", ...relations] });
+    @Roles(Permission.USER_CREATE)
+    @Post()
+    create(@Body() createUserDto: CreateUserDto): Promise<User> {
+        return this.authService.registerUser(createUserDto);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -30,17 +35,25 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_GET)
+    @Get(":id")
+    get(@Param("id", ParseIntPipe) id: number): Promise<User> {
+        return this.userService.get(id, { relations: ["role", "course", ...relations] });
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.USER_GET)
     @Get()
     async getAll(
         @Pager() pagination: IPagination,
         @Sorter() sort: ISort<User>,
         @Query("status") status: Status,
+        @Query("keyword") keyword?: string,
     ): Promise<IPaginatedResponse<User>> {
         const role = await this.roleService.getOne({ name: DefaultRoles.SUPER_ADMIN });
         const where = status ? { status } : {};
         return this.userService.getMany(
             { ...where, role: Not(role.id) },
-            { ...pagination, ...sort },
+            { ...pagination, ...sort, filter: { keyword, fields: ["name"] } },
             { relations: ["role", "course", ...relations] },
         );
     }

@@ -14,6 +14,11 @@ const RoleErrors = {
         code: "ROLE_400_EMPTY_NAME",
         message: "Role name cannot be empty!",
     },
+    ROLE_400_EMPTY_PRIORITY: {
+        status: 400,
+        code: "ROLE_400_EMPTY_PRIORITY",
+        message: "Role priority cannot be empty!",
+    },
     ROLE_400_EMPTY_STATUS: {
         status: 400,
         code: "ROLE_400_EMPTY_STATUS",

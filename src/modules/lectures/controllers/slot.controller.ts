@@ -37,8 +37,13 @@ export class SlotController {
         @Pager() pagination: IPagination,
         @Sorter() sort: ISort<CourseModule>,
         @Query("status") status: Status,
+        @Query("keyword") keyword?: string,
     ): Promise<IPaginatedResponse<Slot>> {
-        return await this.slotService.getMany(status ? { status } : {}, { ...pagination, ...sort }, { relations });
+        return await this.slotService.getMany(
+            status ? { status } : {},
+            { ...pagination, ...sort, filter: { keyword, fields: ["number"] } },
+            { relations },
+        );
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

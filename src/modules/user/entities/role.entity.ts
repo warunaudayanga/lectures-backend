@@ -28,6 +28,9 @@ export class Role implements IRole {
     @OneToMany(() => User, (user) => user.role)
     users?: User[];
 
+    @Column({ nullable: false })
+    priority: number;
+
     @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
     status: Status | string;
 
