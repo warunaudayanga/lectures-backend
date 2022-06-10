@@ -9,7 +9,6 @@ import {
 } from "typeorm";
 import { ISchedule } from "../interfaces";
 import { DateOnly, Time } from "../../../core/interfaces";
-import { now } from "../../../core/utils";
 import { Timetable } from "./timetable.entity";
 import { Day, Status } from "../../../core/enums";
 import { Lecturer } from "./lecturer.entity";
@@ -39,7 +38,7 @@ export class Schedule implements ISchedule {
     @Column({ type: "enum", enum: Day, nullable: true })
     dayL2: Day;
 
-    @Column("date", { nullable: false, default: now("YYYY-MM-DD") })
+    @Column("date", { nullable: false })
     date: DateOnly;
 
     @Column("date", { nullable: true })
