@@ -24,7 +24,9 @@ export class UserController {
     @Roles(Permission.USER_CREATE)
     @Post()
     create(@Body() createUserDto: CreateUserDto): Promise<User> {
-        return this.authService.registerUser(createUserDto);
+        const { firstName, lastName } = createUserDto;
+        const name = `${firstName} ${lastName}`;
+        return this.authService.registerUser({ ...createUserDto, name });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -57,8 +59,9 @@ export class UserController {
     @Patch(":id")
     update(@Param("id", ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<IStatusResponse> {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, salt, status, role, ...rest } = updateUserDto as User;
-        return this.userService.update(id, { ...rest });
+        const { firstName, lastName, password, salt, status, role, ...rest } = updateUserDto as User;
+        const name = `${firstName} ${lastName}`;
+        return this.userService.update(id, { ...rest, firstName, lastName, name });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

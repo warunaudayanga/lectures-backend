@@ -16,7 +16,9 @@ export class AuthController {
 
     @Post("register")
     register(@Body() createUserDto: CreateUserDto): Promise<User> {
-        return this.authService.registerUser(createUserDto);
+        const { firstName, lastName } = createUserDto;
+        const name = `${firstName} ${lastName}`;
+        return this.authService.registerUser({ ...createUserDto, name });
     }
 
     @Post("login")

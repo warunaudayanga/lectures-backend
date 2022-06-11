@@ -22,10 +22,10 @@ export class UserService extends EntityService<User> {
         options?: SaveOptions,
         eh?: (err: IQueryError) => Error | void,
     ): Promise<User> {
-        const course = await this.courseService.get(createDto.course.id);
+        const { courseString } = await this.courseService.get(createDto.course.id);
         const { firstName, lastName } = createDto;
         const name = `${firstName} ${lastName}`;
-        const studentIdString = `${course.courseString}/${String(createDto.studentId).length === 1 ? "0" : ""}${
+        const studentIdString = `${courseString}/${String(createDto.studentId).length === 1 ? "0" : ""}${
             createDto.studentId
         }`;
         return await super.create({ ...createDto, name, studentIdString }, options, eh);
@@ -38,12 +38,8 @@ export class UserService extends EntityService<User> {
     ): Promise<IStatusResponse> {
         await super.update(id, updateDto, eh);
         const user = await this.get(id, { relations: ["course"] });
-        const course = await this.courseService.get(user.course.id);
-        const { firstName, lastName } = updateDto;
-        const name = `${firstName} ${lastName}`;
-        const studentIdString = `${course.courseString}/${String(user.studentId).length === 1 ? "0" : ""}${
-            user.studentId
-        }`;
-        return await super.update(id, { ...updateDto, name, studentIdString }, eh);
+        const { courseString } = await this.courseService.get(user.course.id);
+        const studentIdString = `${courseString}/${String(user.studentId).length === 1 ? "0" : ""}${user.studentId}`;
+        return await super.update(id, { ...updateDto, studentIdString }, eh);
     }
 }
