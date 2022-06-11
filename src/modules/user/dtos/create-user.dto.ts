@@ -25,4 +25,7 @@ export class CreateUserDto {
     @IsObject(toErrString(UserErrors.USER_400_INVALID_COURSE))
     @IsOptional()
     course?: Course;
+
+    @IsEmpty()
+    name?: string;
 }

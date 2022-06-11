@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional } from "class-validator";
+import { IsEmpty, IsEnum, IsOptional } from "class-validator";
 import { BaseDto } from "../../../core/entity";
 import { toErrString } from "../../../core/converters";
 import { LecturerErrors } from "../responses";
@@ -23,4 +23,7 @@ export class UpdateLecturerDto extends BaseDto {
 
     @IsOptional()
     profileImage?: string;
+
+    @IsEmpty()
+    name?: string;
 }

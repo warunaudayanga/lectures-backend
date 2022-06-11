@@ -56,7 +56,9 @@ export class LecturerController {
     @UseGuards(JwtAuthGuard)
     @Post()
     create(@ReqUser() createdBy: User, @Body() createLecturerDto: CreateLecturerDto): Promise<Lecturer> {
-        return this.lecturerService.create({ ...createLecturerDto, createdBy });
+        const { title, firstName, lastName } = createLecturerDto;
+        const name = `${title} ${firstName} ${lastName}`;
+        return this.lecturerService.create({ ...createLecturerDto, name, createdBy });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -67,7 +69,9 @@ export class LecturerController {
         @Param("id", ParseIntPipe) id: number,
         @Body() updateLecturerDto: UpdateLecturerDto,
     ): Promise<IStatusResponse> {
-        return this.lecturerService.update(id, { ...updateLecturerDto, updatedBy });
+        const { title, firstName, lastName } = updateLecturerDto;
+        const name = `${title} ${firstName} ${lastName}`;
+        return this.lecturerService.update(id, { ...updateLecturerDto, name, updatedBy });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

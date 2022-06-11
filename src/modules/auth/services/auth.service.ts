@@ -93,16 +93,20 @@ export class AuthService {
             // if (user.statusString !== StatusString.ACTIVE) {
             //     return Promise.reject(new HttpException(AuthErrors.AUTH_401_NOT_ACTIVE, HttpStatus.UNAUTHORIZED));
             // }
-            const tokenObject = this.issueJWT(user);
-            return {
-                token: tokenObject.token,
-                expiresIn: tokenObject.expires,
-                user,
-            };
+            return this.getTokenData(user);
         } catch (err: any) {
             LoggerService.error(err);
             throw new HttpException(AuthErrors.AUTH_401_INVALID, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    getTokenData(user: User): TokenData {
+        const tokenObject = this.issueJWT(user);
+        return {
+            token: tokenObject.token,
+            expiresIn: tokenObject.expires,
+            user,
+        };
     }
 
     public verifyToken(bearerToken: string): { sub: number; iat: number; exp: number } {

@@ -68,10 +68,7 @@ export class User implements IUser {
     @Column({ default: false })
     emailVerified: boolean;
 
-    @Column({
-        generatedType: "STORED",
-        asExpression: "CONCAT(firstName, ' ', lastName)",
-    })
+    @Column({ nullable: true })
     name: string;
 
     @Column()

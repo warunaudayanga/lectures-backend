@@ -8,6 +8,7 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 import { DeepPartial } from "typeorm/common/DeepPartial";
 import { SaveOptions } from "typeorm";
 import { ICourseModule } from "../interfaces";
+import { CourseType } from "../enums";
 
 @Injectable()
 export class CourseService extends EntityService<Course> {
@@ -23,7 +24,9 @@ export class CourseService extends EntityService<Course> {
         modules?: ICourseModule[] | number[],
         options?: SaveOptions,
     ): Promise<Course> {
-        let course = await this.create(createDto, options);
+        const { code, year, type } = createDto;
+        const courseString = `${code}/${String(year).slice(2, 4)}/${type === CourseType.FULL_TIME ? "B1" : "B2"}`;
+        let course = await this.create({ ...createDto, courseString }, options);
         if (modules?.length) {
             await this.moduleService.updateByIds(
                 modules.map((m) => (typeof m === "object" ? m.id : m) as number),
@@ -38,6 +41,8 @@ export class CourseService extends EntityService<Course> {
         updateDto: T,
         modules?: ICourseModule[] | number[],
     ): Promise<IStatusResponse> {
+        const { code, year, type } = updateDto;
+        const courseString = `${code}/${String(year).slice(2, 4)}/${type === CourseType.FULL_TIME ? "B1" : "B2"}`;
         if (modules?.length) {
             const course = await this.get(id);
             await this.moduleService.updateByIds(
@@ -45,6 +50,6 @@ export class CourseService extends EntityService<Course> {
                 { course },
             );
         }
-        return await this.update(id, updateDto);
+        return await this.update(id, { ...updateDto, courseString });
     }
 }

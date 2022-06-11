@@ -1,10 +1,13 @@
-import { IsBoolean, IsEnum, IsNotEmpty } from "class-validator";
+import { IsBoolean, IsEmpty, IsEnum, IsNotEmpty } from "class-validator";
 import { ModuleErrors } from "../responses";
 import { BaseDto } from "../../../core/entity";
 import { toErrString } from "../../../core/converters";
 import { Department } from "../enums";
 
 export class CreateCourseModuleDto extends BaseDto {
+    @IsEmpty()
+    code?: string;
+
     @IsNotEmpty(toErrString(ModuleErrors.MODULE_400_EMPTY_NAME))
     name: string;
 

@@ -64,6 +64,7 @@ export class SeedingMiddleware implements NestMiddleware {
         const admin: DeepPartial<User> = {
             firstName: "Super",
             lastName: "Admin",
+            name: "Super Admin",
             username: "admin",
             studentId: 0,
             studentIdString: "",

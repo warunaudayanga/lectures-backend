@@ -44,11 +44,7 @@ export class CourseModule implements ICourseModule {
     @ManyToOne(() => Course, (course) => course.modules)
     course?: Course;
 
-    @Column({
-        generatedType: "STORED",
-        asExpression:
-            "CONCAT(department, semester, IF(LENGTH(credits)=1, CONCAT(0, credits), credits), SERIAL, IF(revised, 1, 0))",
-    })
+    @Column({ nullable: true })
     code: string;
 
     @Column({ type: "enum", enum: Status, default: Status.INACTIVE })

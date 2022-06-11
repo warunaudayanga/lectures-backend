@@ -34,10 +34,7 @@ export class Lecturer implements ILecturer {
     @Column({ nullable: true })
     profileImage: string;
 
-    @Column({
-        generatedType: "STORED",
-        asExpression: "CONCAT(title, ' ', firstName, ' ', lastName)",
-    })
+    @Column({ nullable: true })
     name: string;
 
     @Column({ type: "enum", enum: Status, default: Status.INACTIVE })

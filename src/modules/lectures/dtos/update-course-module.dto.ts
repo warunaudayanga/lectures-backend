@@ -1,10 +1,13 @@
-import { IsBoolean, IsEnum, IsOptional } from "class-validator";
+import { IsBoolean, IsEmpty, IsEnum, IsOptional } from "class-validator";
 import { ModuleErrors } from "../responses";
 import { BaseDto } from "../../../core/entity";
 import { toErrString } from "../../../core/converters";
 import { Department } from "../enums";
 
 export class UpdateCourseModuleDto extends BaseDto {
+    @IsEmpty()
+    code?: string;
+
     @IsOptional()
     name?: string;
 

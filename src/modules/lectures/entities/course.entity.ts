@@ -39,10 +39,7 @@ export class Course implements ICourse {
     @OneToMany(() => User, (user) => user.course)
     users?: User[];
 
-    @Column({
-        generatedType: "STORED",
-        asExpression: `CONCAT(code, '/', SUBSTRING(year, 3, 4), '/', IF(type='${CourseType.FULL_TIME}', 'B1', 'B2'))`,
-    })
+    @Column({ nullable: true })
     courseString: string;
 
     @Column({ type: "enum", enum: Status, default: Status.INACTIVE })

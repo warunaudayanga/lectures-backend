@@ -27,12 +27,6 @@ export class UserController {
         return this.authService.registerUser(createUserDto);
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get("me")
-    getAuthUser(@ReqUser() user: User): Promise<User> {
-        return this.userService.get(user.id, { relations: ["role", "course", ...relations] });
-    }
-
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_GET)
     @Get(":id")

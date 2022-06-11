@@ -23,4 +23,7 @@ export class CreateLecturerDto extends BaseDto {
 
     @IsOptional()
     profileImage?: string;
+
+    @IsNotEmpty()
+    name?: string;
 }

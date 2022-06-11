@@ -9,8 +9,12 @@ export const config: TypeOrmModuleOptions = {
     database: process.env.DATABASE_SCHEMA || "lectures",
     entities: ["dist/**/*.entity{.ts,.js}"],
     migrations: ["./migrations/*{.ts,.js}"],
+    charset: "utf8mb4",
     cli: {
         migrationsDir: "./migrations",
+    },
+    extra: {
+        charset: "utf8mb4",
     },
     synchronize: false,
     legacySpatialSupport: false,

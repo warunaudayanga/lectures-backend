@@ -57,7 +57,11 @@ export class CourseModuleController {
     @UseGuards(JwtAuthGuard)
     @Post()
     create(@ReqUser() createdBy: User, @Body() moduleDto: CreateCourseModuleDto): Promise<CourseModule> {
-        return this.moduleService.create({ ...moduleDto, createdBy });
+        const { department, semester, credits, serial, revised } = moduleDto;
+        const code = `${department}${semester}${String(credits).length ? "0" + credits : credits}${serial}${
+            revised ? 1 : 0
+        }`;
+        return this.moduleService.create({ ...moduleDto, code, createdBy });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -68,7 +72,11 @@ export class CourseModuleController {
         @Param("id", ParseIntPipe) id: number,
         @Body() moduleDto: UpdateCourseModuleDto,
     ): Promise<IStatusResponse> {
-        return this.moduleService.update(id, { ...moduleDto, updatedBy });
+        const { department, semester, credits, serial, revised } = moduleDto;
+        const code = `${department}${semester}${String(credits).length ? "0" + credits : credits}${serial}${
+            revised ? 1 : 0
+        }`;
+        return this.moduleService.update(id, { ...moduleDto, code, updatedBy });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
