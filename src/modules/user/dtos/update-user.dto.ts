@@ -10,6 +10,9 @@ export class UpdateUserDto {
     @IsOptional()
     lastName?: string;
 
+    @IsOptional()
+    password?: string;
+
     @IsEmpty(toErrString(UserErrors.USER_400_EMPTY_PASSWORD))
     salt: string;
 

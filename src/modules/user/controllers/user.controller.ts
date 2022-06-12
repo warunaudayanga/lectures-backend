@@ -59,7 +59,12 @@ export class UserController {
     @Patch(":id")
     update(@Param("id", ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<IStatusResponse> {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { firstName, lastName, password, salt, status, role, ...rest } = updateUserDto as User;
+        const { firstName, lastName, status, role, ...rest } = updateUserDto as User;
+        if (rest.password) {
+            const authData = AuthService.generatePassword(rest.password);
+            rest.password = authData.password;
+            rest.salt = authData.salt;
+        }
         const name = `${firstName} ${lastName}`;
         return this.userService.update(id, { ...rest, firstName, lastName, name });
     }
