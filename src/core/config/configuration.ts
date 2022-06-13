@@ -36,6 +36,11 @@ export default () => ({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    pushover: {
+        url: process.env.PUSHOVER_URL,
+        user: process.env.PUSHOVER_USER,
+        token: process.env.PUSHOVER_TOKEN,
+    },
     regex: {
         year: new RegExp(/^[1-9]\d{3,}$/),
         time: new RegExp(/^([0-1]?\d|2[0-3])(?::([0-5]?\d))?(?::([0-5]?\d))?$/),

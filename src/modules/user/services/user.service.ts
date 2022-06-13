@@ -20,6 +20,7 @@ export class UserService extends EntityService<User> {
     async create<T extends DeepPartial<User>>(
         createDto: T,
         options?: SaveOptions,
+        relations?: string[],
         eh?: (err: IQueryError) => Error | void,
     ): Promise<User> {
         const { courseString } = await this.courseService.get(createDto.course.id);
@@ -28,7 +29,7 @@ export class UserService extends EntityService<User> {
         const studentIdString = `${courseString}/${String(createDto.studentId).length === 1 ? "0" : ""}${
             createDto.studentId
         }`;
-        return await super.create({ ...createDto, name, studentIdString }, options, eh);
+        return await super.create({ ...createDto, name, studentIdString }, options, ["course"], eh);
     }
 
     async update<T extends QueryDeepPartialEntity<User>>(

@@ -5,9 +5,13 @@ import { join } from "path";
 import configuration from "../../core/config/configuration";
 import { Prefix } from "../../core/enums";
 import { CommonErrors } from "../../core/responses";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Events } from "../../core/modules/webhook/enums/events.enum";
 
 @Controller(Prefix.COMMON)
 export class CommonController {
+    constructor(private readonly eventEmitter: EventEmitter2) {}
+
     @Get("errors")
     getErrorFile(@Response({ passthrough: true }) res: ExpressResponse): StreamableFile {
         try {
@@ -21,5 +25,19 @@ export class CommonController {
         } catch (e) {
             throw new NotFoundException(CommonErrors.E_404_FILE_NOT_EXIST);
         }
+    }
+
+    @Get("test-webhook")
+    testWebhook(): void {
+        const user = {
+            name: "Waruna Udayanga",
+            studentIdString: "SOF/21/B2/54",
+            createdAt: new Date(),
+            course: {
+                code: "SOF",
+                name: "Software Technology",
+            },
+        };
+        this.eventEmitter.emit(Events.USER_REGISTERED, user);
     }
 }

@@ -21,15 +21,6 @@ export class UserController {
     ) {}
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
-    @Roles(Permission.USER_CREATE)
-    @Post()
-    create(@Body() createUserDto: CreateUserDto): Promise<User> {
-        const { firstName, lastName } = createUserDto;
-        const name = `${firstName} ${lastName}`;
-        return this.authService.registerUser({ ...createUserDto, name });
-    }
-
-    @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_GET)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<User> {
@@ -55,9 +46,22 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.USER_CREATE)
+    @Post()
+    create(@ReqUser() createdBy: User, @Body() createUserDto: CreateUserDto): Promise<User> {
+        const { firstName, lastName } = createUserDto;
+        const name = `${firstName} ${lastName}`;
+        return this.authService.registerUser({ ...createUserDto, name }, createdBy);
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_UPDATE)
     @Patch(":id")
-    update(@Param("id", ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<IStatusResponse> {
+    update(
+        @ReqUser() updatedBy: User,
+        @Param("id", ParseIntPipe) id: number,
+        @Body() updateUserDto: UpdateUserDto,
+    ): Promise<IStatusResponse> {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { firstName, lastName, status, role, ...rest } = updateUserDto as User;
         if (rest.password) {
@@ -66,7 +70,7 @@ export class UserController {
             rest.salt = authData.salt;
         }
         const name = `${firstName} ${lastName}`;
-        return this.userService.update(id, { ...rest, firstName, lastName, name });
+        return this.userService.update(id, { ...rest, firstName, lastName, name, updatedBy });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

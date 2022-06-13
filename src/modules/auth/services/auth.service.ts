@@ -15,6 +15,8 @@ import { LoggerService } from "../../../core/services";
 import { EntityErrors, IQueryError } from "../../../core/entity";
 import { Status } from "../../../core/enums";
 import { DefaultRoles } from "../../user/enums/default-roles.enum";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Events } from "../../../core/modules/webhook/enums/events.enum";
 
 @Injectable()
 export class AuthService {
@@ -30,6 +32,7 @@ export class AuthService {
         private readonly userService: UserService,
         private roleService: RoleService,
         private jwtService: JwtService,
+        private eventEmitter: EventEmitter2,
     ) {}
 
     public static getPrivateKey(): string {
@@ -66,7 +69,7 @@ export class AuthService {
         };
     };
 
-    async registerUser(createUserDto: CreateUserDto): Promise<User> {
+    async registerUser(createUserDto: CreateUserDto, createdBy?: User): Promise<User> {
         const authData = AuthService.generatePassword(createUserDto.password);
         createUserDto.password = authData.password;
         createUserDto.salt = authData.salt;
@@ -78,7 +81,14 @@ export class AuthService {
                 return new ConflictException(EntityErrors.E_409_EXIST_U("user", "student id"));
             }
         };
-        return this.userService.create({ ...createUserDto, role, status: Status.ACTIVE }, undefined, eh);
+        let user = await this.userService.create(
+            { ...createUserDto, role, status: Status.ACTIVE, createdBy },
+            undefined,
+            ["course"],
+            eh,
+        );
+        this.eventEmitter.emit(Events.USER_REGISTERED, user);
+        return user;
     }
 
     async authenticate(authDataDto: AuthDataDto): Promise<TokenData> {

@@ -23,11 +23,12 @@ export abstract class EntityService<Entity extends IBaseEntity> {
     async create<T extends DeepPartial<Entity>>(
         createDto: T,
         options?: SaveOptions,
+        relations?: string[],
         eh?: (err: IQueryError) => Error | void,
     ): Promise<Entity> {
         try {
             const entity = await this.repository.save(createDto, options);
-            return this.get(entity.id);
+            return this.get(entity.id, { relations });
         } catch (e: any) {
             if (eh) {
                 const err = eh(e);
