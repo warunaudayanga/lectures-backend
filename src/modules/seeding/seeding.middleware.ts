@@ -26,6 +26,18 @@ export class SeedingMiddleware implements NestMiddleware {
             return next();
         }
 
+        const permissions = [
+            Permission.SCHEDULE_LIST,
+            Permission.SCHEDULE_GET,
+            Permission.SCHEDULE_VIEW,
+            Permission.TIMETABLE_LIST,
+            Permission.TIMETABLE_GET,
+            Permission.TIMETABLE_VIEW,
+            Permission.COURSE_GET,
+            Permission.LECTURER_GET,
+            Permission.SLOT_GET,
+        ];
+
         const rolesDto: DeepPartial<Role>[] = [
             {
                 name: DefaultRoles.SUPER_ADMIN,
@@ -35,25 +47,25 @@ export class SeedingMiddleware implements NestMiddleware {
             },
             {
                 name: DefaultRoles.ADMIN,
-                permissions: Object.values([Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET]),
+                permissions,
                 priority: 2,
                 status: Status.ACTIVE,
             },
             {
                 name: DefaultRoles.MODERATOR,
-                permissions: [Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET],
+                permissions,
                 priority: 3,
                 status: Status.ACTIVE,
             },
             {
                 name: DefaultRoles.REPRESENTATIVE,
-                permissions: [Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET],
+                permissions,
                 priority: 4,
                 status: Status.ACTIVE,
             },
             {
                 name: DefaultRoles.STUDENT,
-                permissions: [Permission.TIMETABLE_VIEW, Permission.TIMETABLE_GET, Permission.SLOT_GET],
+                permissions,
                 priority: 10,
                 status: Status.ACTIVE,
             },

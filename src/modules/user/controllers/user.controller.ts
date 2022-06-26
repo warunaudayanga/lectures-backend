@@ -12,6 +12,8 @@ import { relations } from "../../../core/config";
 import { DefaultRoles } from "../enums/default-roles.enum";
 import { Not } from "typeorm";
 import { AuthService } from "../../auth/services";
+import { UpdateMeDto } from "../dtos/update-me.dto";
+
 @Controller(Prefix.USER)
 export class UserController {
     constructor(
@@ -19,6 +21,12 @@ export class UserController {
         private readonly userService: UserService,
         private readonly roleService: RoleService,
     ) {}
+
+    @UseGuards(JwtAuthGuard)
+    @Get("me")
+    getMe(@ReqUser() user: User): Promise<User> {
+        return this.get(user.id);
+    }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_GET)
@@ -52,6 +60,12 @@ export class UserController {
         const { firstName, lastName } = createUserDto;
         const name = `${firstName} ${lastName}`;
         return this.authService.registerUser({ ...createUserDto, name }, createdBy);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Patch("me")
+    updateMe(@ReqUser() user: User, @Body() updateMeDto: UpdateMeDto): Promise<IStatusResponse> {
+        return this.update(user, user.id, updateMeDto);
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

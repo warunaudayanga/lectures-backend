@@ -11,28 +11,23 @@ import * as moment from "moment";
 
 @Injectable()
 export class WebhookService {
-    constructor(private readonly http: HttpService) {}
-
-    sendMessage(payload: PushoverPayload): void {
+    static sendMessage(payload: PushoverPayload, token?: string): void {
         const requestDto: PushoverRequestDto = {
             user: configuration().pushover.user,
-            token: configuration().pushover.token,
+            token: token ?? configuration().pushover.token,
             html: 1,
             ...payload,
         };
-        this.http.post(configuration().pushover.url, requestDto).subscribe();
+        const http = new HttpService();
+        http.post(configuration().pushover.url, requestDto).subscribe();
     }
 
     @OnEvent(Events.USER_REGISTERED)
     onUserRegistered(user: User): void {
         const title = "Alert";
-        let message = "";
         const createdAt = moment(user.createdAt).format("YYYY-MM-DD / hh:mm:ss a");
-        if (user.createdBy) {
-            message = String(message);
-        }
-        message += `
-            <font color='#ff8c00'><b>A new user has been ${user.createdAt ? "created" : "registered"}!</b></font><br>
+        const message = `
+            <font color='#ff8c00'><b>A new user has been ${user.createdBy ? "created" : "registered"}!</b></font><br>
             <font color='#ff0000'><b>* </b></font><font color='green'><b>Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </font><font color='white'><b>${
                 user.name
             }</b></font>
@@ -44,6 +39,20 @@ export class WebhookService {
             }</b></font>
             <font color='#ff0000'><b>* </b></font><font color='green'><b>On&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </font><font color='white'><b>${createdAt}</b></font><br>`;
         const payload: PushoverPayload = { title, message };
-        this.sendMessage(payload);
+        WebhookService.sendMessage(payload);
+    }
+
+    @OnEvent(Events.ERROR)
+    onError(error: Error): void {
+        WebhookService.sendError(error);
+    }
+
+    static sendError(error: Error): void {
+        const title = "Error";
+        const message = `
+            <font color='#ff8c00'>${error.message}</font><br>
+            <font color='#ff0000'>${error.stack}</font>`;
+        const payload: PushoverPayload = { title, message };
+        this.sendMessage(payload, configuration().pushover.errorToken);
     }
 }

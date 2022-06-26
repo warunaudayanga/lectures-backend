@@ -15,7 +15,7 @@
 //         if (existingClient) {
 //             this.clients[this.clients.indexOf(existingClient)] = { client, userId };
 //         } else {
-//             this.clients.push({ client, userId });
+//             this.clients.push-notification({ client, userId });
 //         }
 //         console.log(`Client connected: { id: ${client.id}, userId: ${userId} }`); // eslint-disable-line no-console
 //         console.log(`Clients: ${this.clients.length}`); // eslint-disable-line no-console

@@ -39,8 +39,13 @@ export class UserService extends EntityService<User> {
     ): Promise<IStatusResponse> {
         await super.update(id, updateDto, eh);
         const user = await this.get(id, { relations: ["course"] });
-        const { courseString } = await this.courseService.get(user.course.id);
-        const studentIdString = `${courseString}/${String(user.studentId).length === 1 ? "0" : ""}${user.studentId}`;
-        return await super.update(id, { ...updateDto, studentIdString }, eh);
+        if (user.course) {
+            const { courseString } = await this.courseService.get(user.course.id);
+            // eslint-disable-next-line require-atomic-updates
+            updateDto.studentIdString = `${courseString}/${String(user.studentId).length === 1 ? "0" : ""}${
+                user.studentId
+            }`;
+        }
+        return super.update(id, { ...updateDto }, eh);
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { AuthService } from "../services";
 import { AuthDataDto } from "../dtos";
 import { TokenData } from "../interfaces";
@@ -7,12 +7,12 @@ import { CreateUserDto } from "../../user/dtos";
 import { Prefix } from "../../../core/enums";
 import { JwtAuthGuard } from "../../../core/guards";
 import { ReqUser } from "../../../core/decorators";
-import { relations } from "../../../core/config";
-import { UserService } from "../../user/services";
+import { UpdatePasswordDto } from "../dtos/update-password.dto";
+import { IStatusResponse } from "../../../core/entity";
 
 @Controller(Prefix.AUTH)
 export class AuthController {
-    constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
+    constructor(private readonly authService: AuthService) {}
 
     @Post("register")
     register(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -33,8 +33,8 @@ export class AuthController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get("me")
-    getAuthUser(@ReqUser() user: User): Promise<User> {
-        return this.userService.get(user.id, { relations: ["role", "course", ...relations] });
+    @Post("change-password")
+    changePassword(@ReqUser() user: User, @Body() updatePasswordDto: UpdatePasswordDto): Promise<IStatusResponse> {
+        return this.authService.changePassword(user.id, updatePasswordDto);
     }
 }

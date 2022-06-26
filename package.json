@@ -45,6 +45,7 @@
     "moment": "^2.29.3",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.5",
+    "onesignal-api-client-nest": "^1.0.8",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

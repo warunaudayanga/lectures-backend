@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { ConflictException, HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { join } from "path";
 import { readFileSync } from "fs";
 import { pbkdf2Sync, randomBytes } from "crypto";
@@ -12,11 +12,12 @@ import { User } from "../../user/entities";
 import { RoleService, UserService } from "../../user/services";
 import { CreateUserDto } from "../../user/dtos";
 import { LoggerService } from "../../../core/services";
-import { EntityErrors, IQueryError } from "../../../core/entity";
+import { EntityErrors, IQueryError, IStatusResponse } from "../../../core/entity";
 import { Status } from "../../../core/enums";
 import { DefaultRoles } from "../../user/enums/default-roles.enum";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Events } from "../../../core/modules/webhook/enums/events.enum";
+import { UpdatePasswordDto } from "../dtos/update-password.dto";
 
 @Injectable()
 export class AuthService {
@@ -70,9 +71,9 @@ export class AuthService {
     };
 
     async registerUser(createUserDto: CreateUserDto, createdBy?: User): Promise<User> {
-        const authData = AuthService.generatePassword(createUserDto.password);
-        createUserDto.password = authData.password;
-        createUserDto.salt = authData.salt;
+        const { password, salt } = AuthService.generatePassword(createUserDto.password);
+        createUserDto.password = password;
+        createUserDto.salt = salt;
         const role = await this.roleService.getOne({ name: DefaultRoles.MODERATOR });
         const eh = (e: IQueryError): Error | void => {
             if (e.sqlMessage.match("users.USERNAME")) {
@@ -108,6 +109,16 @@ export class AuthService {
             LoggerService.error(err);
             throw new HttpException(AuthErrors.AUTH_401_INVALID, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    async changePassword(id: number, updatePasswordDto: UpdatePasswordDto): Promise<IStatusResponse> {
+        const { password, salt } = await this.userService.get(id);
+        const { oldPassword, newPassword } = updatePasswordDto;
+        if (AuthService.verifyHash(oldPassword, password, salt)) {
+            const { password, salt } = AuthService.generatePassword(newPassword);
+            return this.userService.update(id, { password, salt });
+        }
+        throw new NotFoundException(AuthErrors.AUTH_401_INVALID_PASSWORD);
     }
 
     getTokenData(user: User): TokenData {

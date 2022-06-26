@@ -40,6 +40,11 @@ export default () => ({
         url: process.env.PUSHOVER_URL,
         user: process.env.PUSHOVER_USER,
         token: process.env.PUSHOVER_TOKEN,
+        errorToken: process.env.PUSHOVER_ERROR_TOKEN,
+    },
+    onesignal: {
+        appId: process.env.ONESIGNAL_APP_ID,
+        restApiKey: process.env.ONESIGNAL_API_KEY,
     },
     regex: {
         year: new RegExp(/^[1-9]\d{3,}$/),
