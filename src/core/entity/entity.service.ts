@@ -251,7 +251,9 @@ export abstract class EntityService<Entity extends IBaseEntity> {
             const { affected } = wipe ? await this.repository.hardDelete(id) : await this.repository.delete(id);
             if (affected !== 0) {
                 if (!wipe && deletedBy) {
-                    await this.update(id, { deletedBy } as any);
+                    try {
+                        await this.update(id, { deletedBy } as any);
+                    } catch (err: any) {}
                 }
                 return EntityUtils.handleSuccess(Operation.DELETE, this.entityName);
             }
