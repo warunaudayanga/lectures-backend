@@ -81,4 +81,9 @@ export class ScheduleService extends EntityService<Schedule> {
         schedules = schedules.map((s, i) => ({ ...s, slot: i + 1, createdBy }));
         return await this.createMany(schedules);
     }
+
+    async getLectureDates(): Promise<string[]> {
+        const [schedules] = await this.scheduleRepository.getMany();
+        return Array.from(groupBy(schedules, (schedules) => schedules.date).keys());
+    }
 }
