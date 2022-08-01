@@ -74,7 +74,7 @@ export class AuthService {
         const { password, salt } = AuthService.generatePassword(createUserDto.password);
         createUserDto.password = password;
         createUserDto.salt = salt;
-        const role = await this.roleService.getOne({ name: DefaultRoles.MODERATOR });
+        const role = await this.roleService.getOne({ name: DefaultRoles.STUDENT });
         const eh = (e: IQueryError): Error | void => {
             if (e.sqlMessage.match("users.USERNAME")) {
                 return new ConflictException(EntityErrors.E_409_EXIST_U("user", "username"));
