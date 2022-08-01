@@ -21,6 +21,13 @@ export class CourseController {
         return Object.values(CourseType);
     }
 
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.MODULE_GET)
+    @Get("all")
+    async getAllWithoutPagination(@Query("status") status: Status): Promise<Course[]> {
+        return await this.courseService.getWithoutPagination(status ? { status } : {}, { relations });
+    }
+
     // @UseGuards(JwtAuthGuard, PermissionGuard)
     // @Roles(Permission.COURSE_GET)
     @UseGuards(JwtAuthGuard)

@@ -81,17 +81,20 @@ export class User implements IUser {
     createdAt: Date;
 
     @ManyToOne(() => User)
-    createdBy: any;
+    // eslint-disable-next-line no-use-before-define
+    createdBy: User;
 
     @UpdateDateColumn()
     updatedAt: Date;
 
     @ManyToOne(() => User)
-    updatedBy?: any;
+    // eslint-disable-next-line no-use-before-define
+    updatedBy?: User;
 
     @DeleteDateColumn()
     deletedAt?: Date;
 
     @ManyToOne(() => User)
-    deletedBy?: any;
+    // eslint-disable-next-line no-use-before-define
+    deletedBy?: User;
 }

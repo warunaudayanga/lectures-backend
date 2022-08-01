@@ -23,11 +23,12 @@ export abstract class EntityService<Entity extends IBaseEntity> {
     async create<T extends DeepPartial<Entity>>(
         createDto: T,
         options?: SaveOptions,
+        relations?: string[],
         eh?: (err: IQueryError) => Error | void,
     ): Promise<Entity> {
         try {
             const entity = await this.repository.save(createDto, options);
-            return this.get(entity.id);
+            return this.get(entity.id, { relations });
         } catch (e: any) {
             if (eh) {
                 const err = eh(e);
@@ -250,7 +251,9 @@ export abstract class EntityService<Entity extends IBaseEntity> {
             const { affected } = wipe ? await this.repository.hardDelete(id) : await this.repository.delete(id);
             if (affected !== 0) {
                 if (!wipe && deletedBy) {
-                    await this.update(id, { deletedBy } as any);
+                    try {
+                        await this.update(id, { deletedBy } as any);
+                    } catch (err: any) {}
                 }
                 return EntityUtils.handleSuccess(Operation.DELETE, this.entityName);
             }

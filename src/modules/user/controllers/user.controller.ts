@@ -12,6 +12,8 @@ import { relations } from "../../../core/config";
 import { DefaultRoles } from "../enums/default-roles.enum";
 import { Not } from "typeorm";
 import { AuthService } from "../../auth/services";
+import { UpdateMeDto } from "../dtos/update-me.dto";
+
 @Controller(Prefix.USER)
 export class UserController {
     constructor(
@@ -20,13 +22,10 @@ export class UserController {
         private readonly roleService: RoleService,
     ) {}
 
-    @UseGuards(JwtAuthGuard, PermissionGuard)
-    @Roles(Permission.USER_CREATE)
-    @Post()
-    create(@Body() createUserDto: CreateUserDto): Promise<User> {
-        const { firstName, lastName } = createUserDto;
-        const name = `${firstName} ${lastName}`;
-        return this.authService.registerUser({ ...createUserDto, name });
+    @UseGuards(JwtAuthGuard)
+    @Get("me")
+    getMe(@ReqUser() user: User): Promise<User> {
+        return this.get(user.id);
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -55,13 +54,37 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.USER_CREATE)
+    @Post()
+    create(@ReqUser() createdBy: User, @Body() createUserDto: CreateUserDto): Promise<User> {
+        const { firstName, lastName } = createUserDto;
+        const name = `${firstName} ${lastName}`;
+        return this.authService.registerUser({ ...createUserDto, name }, createdBy);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Patch("me")
+    updateMe(@ReqUser() user: User, @Body() updateMeDto: UpdateMeDto): Promise<IStatusResponse> {
+        return this.update(user, user.id, updateMeDto);
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.USER_UPDATE)
     @Patch(":id")
-    update(@Param("id", ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<IStatusResponse> {
+    update(
+        @ReqUser() updatedBy: User,
+        @Param("id", ParseIntPipe) id: number,
+        @Body() updateUserDto: UpdateUserDto,
+    ): Promise<IStatusResponse> {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { firstName, lastName, password, salt, status, role, ...rest } = updateUserDto as User;
+        const { firstName, lastName, status, role, ...rest } = updateUserDto as User;
+        if (rest.password) {
+            const authData = AuthService.generatePassword(rest.password);
+            rest.password = authData.password;
+            rest.salt = authData.salt;
+        }
         const name = `${firstName} ${lastName}`;
-        return this.userService.update(id, { ...rest, firstName, lastName, name });
+        return this.userService.update(id, { ...rest, firstName, lastName, name, updatedBy });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

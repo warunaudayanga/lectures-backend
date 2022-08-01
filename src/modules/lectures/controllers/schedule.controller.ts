@@ -47,6 +47,14 @@ export class ScheduleController {
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.SCHEDULE_GET)
     @UseGuards(JwtAuthGuard)
+    @Get("lecture-dates")
+    getLectureDates(): Promise<string[]> {
+        return this.scheduleService.getLectureDates();
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.SCHEDULE_GET)
+    @UseGuards(JwtAuthGuard)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<Schedule> {
         return this.scheduleService.get(id, { relations });

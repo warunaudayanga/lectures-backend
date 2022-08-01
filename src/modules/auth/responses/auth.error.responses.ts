@@ -14,6 +14,11 @@ const AuthErrors = {
         code: "AUTH_401_INVALID",
         message: "Invalid username or password!",
     },
+    AUTH_401_INVALID_PASSWORD: {
+        status: 401,
+        code: "AUTH_401_INVALID_PASSWORD",
+        message: "Invalid password!",
+    },
     AUTH_401_NOT_LOGGED_IN: {
         status: 401,
         code: "AUTH_401_NOT_LOGGED_IN",

@@ -9,11 +9,15 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { LecturesModule } from "./modules/lectures/lectures.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { SeedingModule } from "./modules/seeding/seeding.module";
+import { EventEmitterModule } from "@nestjs/event-emitter";
+import { WebhookModule } from "./core/modules";
 
 @Module({
     imports: [
         ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
         CommonModule,
+        EventEmitterModule.forRoot(),
+        WebhookModule,
         ScheduleModule.forRoot(),
         TypeOrmModule.forRoot({
             type: configuration().database.type as "mysql" | "mariadb",
