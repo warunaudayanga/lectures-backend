@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from "fs";
 import { LoggerService as NestLogger } from "@nestjs/common";
 import { Logger, ILogObject } from "tslog";
 import configuration from "../config/configuration";
-import { WebhookService } from "../modules";
+// import { WebhookService } from "../modules";
 
 export class LoggerService implements NestLogger {
     private logger: Logger;
@@ -113,12 +113,12 @@ export class LoggerService implements NestLogger {
     }
 
     error(message: any, ...optionalParams: any[]): void {
-        WebhookService.sendError(message);
+        // WebhookService.sendError(message);
         this.logger.error(message, ...optionalParams);
     }
 
     static error(message: any, ...optionalParams: any[]): void {
-        WebhookService.sendError(message);
+        // WebhookService.sendError(message);
         this.logger.error(message, ...optionalParams);
     }
 
