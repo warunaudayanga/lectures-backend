@@ -29,10 +29,16 @@ export class UpdateTimetableDto extends BaseDto {
     slotL2?: Slot;
 
     @IsOptional()
+    meetingsUrl?: string;
+
+    @IsOptional()
     recordingsUrl?: string;
 
     @IsOptional()
     documentsUrl?: string;
+
+    @IsOptional()
+    meetingsUrlL2?: string;
 
     @IsOptional()
     recordingsUrlL2?: string;

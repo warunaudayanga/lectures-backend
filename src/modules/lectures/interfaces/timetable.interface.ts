@@ -13,8 +13,10 @@ export interface ITimetable extends IBaseEntity {
     day: Day;
     slot: ISlot;
     slotL2?: ISlot;
+    meetingsUrl?: string;
     recordingsUrl?: string;
     documentsUrl?: string;
+    meetingsUrlL2?: string;
     recordingsUrlL2?: string;
     documentsUrlL2?: string;
 }
