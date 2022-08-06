@@ -44,10 +44,16 @@ export class Timetable implements ITimetable {
     slotL2: Slot;
 
     @Column({ nullable: true })
+    meetingsUrl?: string;
+
+    @Column({ nullable: true })
     recordingsUrl?: string;
 
     @Column({ nullable: true })
     documentsUrl?: string;
+
+    @Column({ nullable: true })
+    meetingsUrlL2?: string;
 
     @Column({ nullable: true })
     recordingsUrlL2?: string;
