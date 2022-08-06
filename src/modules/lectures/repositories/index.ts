@@ -4,3 +4,4 @@ export * from "./lecturer.repository";
 export * from "./timetable.repository";
 export * from "./schedule.repository";
 export * from "./slot.repository";
+export * from "./click.repository";

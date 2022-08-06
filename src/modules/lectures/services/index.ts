@@ -4,3 +4,4 @@ export * from "./lecturer.service";
 export * from "./timetable.service";
 export * from "./schedule.service";
 export * from "./slot.service";
+export * from "./click.service";

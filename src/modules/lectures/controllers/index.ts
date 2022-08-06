@@ -4,3 +4,4 @@ export * from "./lecturer.controller";
 export * from "./timetable.controller";
 export * from "./schedule.controller";
 export * from "./slot.controller";
+export * from "./click.controller";
