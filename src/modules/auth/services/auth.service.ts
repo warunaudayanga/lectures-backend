@@ -101,9 +101,9 @@ export class AuthService {
             if (!AuthService.verifyHash(authDataDto.password, user.password, user.salt)) {
                 return Promise.reject(new HttpException(AuthErrors.AUTH_401_INVALID, HttpStatus.UNAUTHORIZED));
             }
-            // if (user.statusString !== StatusString.ACTIVE) {
-            //     return Promise.reject(new HttpException(AuthErrors.AUTH_401_NOT_ACTIVE, HttpStatus.UNAUTHORIZED));
-            // }
+            if (user.status !== Status.ACTIVE) {
+                return Promise.reject(new HttpException(AuthErrors.AUTH_401_NOT_ACTIVE, HttpStatus.UNAUTHORIZED));
+            }
             return this.getTokenData(user);
         } catch (err: any) {
             LoggerService.error(err);

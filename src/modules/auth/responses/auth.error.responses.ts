@@ -24,6 +24,11 @@ const AuthErrors = {
         code: "AUTH_401_NOT_LOGGED_IN",
         message: "User must be logged in to access this resource!",
     },
+    AUTH_401_NOT_ACTIVE: {
+        status: 401,
+        code: "AUTH_401_NOT_ACTIVE",
+        message: "User account is inactive. Contact a Moderator or Admin!",
+    },
     AUTH_401_INVALID_TOKEN: {
         status: 401,
         code: "AUTH_401_INVALID_TOKEN",
