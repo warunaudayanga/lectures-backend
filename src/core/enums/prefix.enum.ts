@@ -11,4 +11,5 @@ export enum Prefix {
     SLOT = "slot",
     TIMETABLE = "timetable",
     SCHEDULE = "schedule",
+    CLICK = "click",
 }

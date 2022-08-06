@@ -12,3 +12,4 @@ export * from "./create-schedule.dto";
 export * from "./update-schedule.dto";
 export * from "./create-timetable-entry.dto";
 export * from "./update-timetable-entry.dto";
+export * from "./create-click.dto";

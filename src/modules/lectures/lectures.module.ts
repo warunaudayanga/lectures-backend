@@ -7,6 +7,7 @@ import {
     TimetableRepository,
     ScheduleRepository,
     SlotRepository,
+    ClickRepository,
 } from "./repositories";
 import {
     CourseService,
@@ -15,8 +16,10 @@ import {
     TimetableService,
     ScheduleService,
     SlotService,
+    ClickService,
 } from "./services";
 import {
+    ClickController,
     CourseController,
     CourseModuleController,
     LecturerController,
@@ -24,7 +27,7 @@ import {
     SlotController,
     TimetableController,
 } from "./controllers";
-import { Course, CourseModule, Lecturer, Schedule, Slot, Timetable } from "./entities";
+import { Course, CourseModule, Lecturer, Schedule, Slot, Timetable, Click } from "./entities";
 
 @Module({
     imports: [
@@ -35,12 +38,14 @@ import { Course, CourseModule, Lecturer, Schedule, Slot, Timetable } from "./ent
             Slot,
             Timetable,
             Schedule,
+            Click,
             CourseRepository,
             CourseModuleRepository,
             LecturerRepository,
             SlotRepository,
             TimetableRepository,
             ScheduleRepository,
+            ClickRepository,
         ]),
     ],
     controllers: [
@@ -50,8 +55,17 @@ import { Course, CourseModule, Lecturer, Schedule, Slot, Timetable } from "./ent
         SlotController,
         TimetableController,
         ScheduleController,
+        ClickController,
     ],
-    providers: [CourseService, CourseModuleService, LecturerService, SlotService, TimetableService, ScheduleService],
+    providers: [
+        CourseService,
+        CourseModuleService,
+        LecturerService,
+        SlotService,
+        TimetableService,
+        ScheduleService,
+        ClickService,
+    ],
     exports: [CourseService],
 })
 export class LecturesModule {}
