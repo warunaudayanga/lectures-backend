@@ -48,7 +48,7 @@ export class UserController {
         const where = status ? { status } : {};
         return this.userService.getMany(
             { ...where, role: Not(role.id) },
-            { ...pagination, ...sort, filter: { keyword, fields: ["name"] } },
+            { ...pagination, ...sort, filter: { keyword, fields: ["name", "username", "studentIdString"] } },
             { relations: ["role", "course", ...relations] },
         );
     }
