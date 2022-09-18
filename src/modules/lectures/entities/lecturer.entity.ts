@@ -44,7 +44,7 @@ export class Lecturer implements ILecturer {
     createdAt: Date;
 
     @ManyToOne(() => User)
-    createdBy: User;
+    createdBy?: User;
 
     @UpdateDateColumn()
     updatedAt: Date;

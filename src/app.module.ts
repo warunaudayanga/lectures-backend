@@ -11,6 +11,7 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { SeedingModule } from "./modules/seeding/seeding.module";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { WebhookModule } from "./core/modules";
+import { PollModule } from "./modules/poll/poll.module";
 
 @Module({
     imports: [
@@ -39,6 +40,7 @@ import { WebhookModule } from "./core/modules";
         SeedingModule,
         AuthModule,
         LecturesModule,
+        PollModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -2,12 +2,17 @@ const CommonErrors = {
     E_400_EMPTY_IDS: {
         status: 400,
         code: "#{upperSnakeCase}_400_EMPTY_IDS",
-        message: "#{firstCase} ids cannot be empty!",
+        message: "#{sentenceCase} ids cannot be empty!",
     },
     E_400_EMPTY_STATUS: {
         status: 400,
         code: "#{upperSnakeCase}_400_EMPTY_STATUS",
-        message: "#{firstCase} status cannot be empty!",
+        message: "#{sentenceCase} status cannot be empty!",
+    },
+    E_400_NOT_EMPTY_STATUS: {
+        status: 400,
+        code: "#{upperSnakeCase}_400_NOT_EMPTY_STATUS",
+        message: "#{sentenceCase} status cannot be updated!",
     },
     E_400_INVALID_IDS: {
         status: 400,

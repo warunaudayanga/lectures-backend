@@ -1,23 +1,23 @@
-import { toFirstCase } from "../utils";
+import { toSentenceCase } from "../utils";
 import { IStatusResponse } from "./interfaces";
 
 const EntityResponses = {
     CREATED: (entityName: string): IStatusResponse => {
         return {
             status: true,
-            message: `${toFirstCase(entityName)} created successfully!`,
+            message: `${toSentenceCase(entityName)} created successfully!`,
         };
     },
     UPDATE: (entityName: string): IStatusResponse => {
         return {
             status: true,
-            message: `${toFirstCase(entityName)} updated successfully!`,
+            message: `${toSentenceCase(entityName)} updated successfully!`,
         };
     },
     SAVE: (entityName: string): IStatusResponse => {
         return {
             status: true,
-            message: `${toFirstCase(entityName)} saved successfully!`,
+            message: `${toSentenceCase(entityName)} saved successfully!`,
         };
     },
     SUCCESS: {

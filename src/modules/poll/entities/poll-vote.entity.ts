@@ -3,32 +3,29 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    Index,
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
-import { Time } from "../../../core/interfaces";
-import { ISlot } from "../interfaces/slot.interface";
+import { IPoll } from "../interfaces";
+import { PollOption } from "../interfaces/poll-option.interface";
 import { Status } from "../../../core/enums";
 import { User } from "../../user/entities";
+import { IPollVote } from "../interfaces/poll-vote.interface";
+import { Poll } from "./poll.entity";
 
-@Entity({ name: "slots" })
-export class Slot implements ISlot {
+@Entity({ name: "poll_vote" })
+export class PollVote implements IPollVote {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Index({ unique: true })
-    @Column({ nullable: false })
-    number: number;
+    @Column({ type: "json", nullable: false })
+    option: PollOption;
 
-    @Column("time", { nullable: false })
-    startAt: Time;
+    @ManyToOne(() => Poll, (poll) => poll.votes, { nullable: false })
+    poll: IPoll;
 
-    @Column("time", { nullable: false })
-    endAt: Time;
-
-    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
+    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
     status: Status | string;
 
     @CreateDateColumn()

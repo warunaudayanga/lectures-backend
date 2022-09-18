@@ -2,19 +2,21 @@ import { IsEmpty } from "class-validator";
 import { IBaseEntity } from "./interfaces";
 import { Status } from "../enums";
 import { User } from "../../modules/user/entities";
+import { CommonErrors } from "../responses";
+import { toErrString } from "../converters";
 
 export class BaseDto implements IBaseEntity {
     @IsEmpty()
     id: number;
 
-    @IsEmpty()
+    @IsEmpty(toErrString(CommonErrors.E_400_NOT_EMPTY_STATUS))
     status: Status;
 
     @IsEmpty()
     createdAt: Date;
 
     @IsEmpty()
-    createdBy: User;
+    createdBy?: User;
 
     @IsEmpty()
     updatedAt: Date;
