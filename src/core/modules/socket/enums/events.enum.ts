@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 export enum Event {
     MESSAGE = "message",
     MESSAGE_RESPONSE = "messageResponse",

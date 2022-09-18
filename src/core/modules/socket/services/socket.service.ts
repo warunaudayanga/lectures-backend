@@ -1,4 +1,6 @@
 /* eslint-disable lines-between-class-members */
+// noinspection JSUnusedGlobalSymbols
+
 import { Injectable } from "@nestjs/common";
 import { Socket } from "socket.io";
 import { IUser } from "src/modules/user/interfaces";
