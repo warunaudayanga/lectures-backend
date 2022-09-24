@@ -37,3 +37,9 @@ lerna-debug.log*
 /.env
 /errors.json
 /temp.json
+/id_rsa
+/id_rsa.pub
+/lectures-prod_2022-08-01_1805h.sql
+/output.pdf
+/template.html
+/.env.bak
