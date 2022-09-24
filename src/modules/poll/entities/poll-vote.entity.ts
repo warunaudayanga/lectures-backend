@@ -8,7 +8,7 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 import { IPoll } from "../interfaces";
-import { PollOption } from "../interfaces/poll-option.interface";
+import { VoteOptions } from "../interfaces/poll-option.interface";
 import { Status } from "../../../core/enums";
 import { User } from "../../user/entities";
 import { IPollVote } from "../interfaces/poll-vote.interface";
@@ -20,12 +20,12 @@ export class PollVote implements IPollVote {
     id: number;
 
     @Column({ type: "json", nullable: false })
-    option: PollOption;
+    option: VoteOptions;
 
     @ManyToOne(() => Poll, (poll) => poll.votes, { nullable: false })
     poll: IPoll;
 
-    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
     status: Status | string;
 
     @CreateDateColumn()

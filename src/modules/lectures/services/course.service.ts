@@ -9,14 +9,16 @@ import { DeepPartial } from "typeorm/common/DeepPartial";
 import { SaveOptions } from "typeorm";
 import { ICourseModule } from "../interfaces";
 import { CourseType } from "../enums";
+import { SocketService } from "../../../core/modules/socket/services/socket.service";
 
 @Injectable()
 export class CourseService extends EntityService<Course> {
     constructor(
         @InjectRepository(CourseRepository) private courseRepository: CourseRepository,
-        private moduleService: CourseModuleService,
+        protected readonly socketService: SocketService,
+        private readonly moduleService: CourseModuleService,
     ) {
-        super(courseRepository, "course", "year and code");
+        super(socketService, courseRepository, "course", "year and code");
     }
 
     async createCourse<T extends DeepPartial<Course>>(

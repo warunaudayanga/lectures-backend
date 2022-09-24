@@ -8,11 +8,15 @@ import { Day } from "../../../core/enums";
 import { FindManyOptions } from "typeorm";
 import { User } from "../../user/entities";
 import { SaveTimetableDto } from "../dtos/save-timetable.dto";
+import { SocketService } from "../../../core/modules/socket/services/socket.service";
 
 @Injectable()
 export class TimetableService extends EntityService<Timetable> {
-    constructor(@InjectRepository(TimetableRepository) private timetableRepository: TimetableRepository) {
-        super(timetableRepository, "timetable", "day and slot");
+    constructor(
+        @InjectRepository(TimetableRepository) private timetableRepository: TimetableRepository,
+        protected readonly socketService: SocketService,
+    ) {
+        super(socketService, timetableRepository, "timetable", "day and slot");
     }
 
     async getTimetable(options?: FindManyOptions<Timetable>): Promise<Map<Day, Array<Timetable>>> {

@@ -4,13 +4,12 @@ import { ScheduleService } from "../services";
 import { Schedule } from "../entities";
 import { UpdateScheduleDto } from "../dtos";
 import { User } from "../../user/entities";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
 import { relations as rel } from "../../../core/config";
-import { DateOnly } from "../../../core/interfaces";
 import { SaveScheduleListDto } from "../dtos/save-schedule-list.dto";
 
 const relations = [
@@ -26,21 +25,21 @@ const relations = [
     ...rel,
 ];
 
-@Controller(Prefix.SCHEDULE)
+@Controller(Endpoint.SCHEDULE)
 export class ScheduleController {
     constructor(private scheduleService: ScheduleService) {}
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.TIMETABLE_GET)
     @Get("by-date/:date")
-    async getByDate(@Param("date") date: DateOnly): Promise<{ schedule: Schedule[]; generated: boolean }> {
+    async getByDate(@Param("date") date: string): Promise<{ schedule: Schedule[]; generated: boolean }> {
         return await this.scheduleService.getByDate(date, { relations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
     @Roles(Permission.TIMETABLE_GET)
     @Post("by-dates")
-    async getByDates(@Body("dates") dates: DateOnly[]): Promise<Map<DateOnly, Array<Schedule>>> {
+    async getByDates(@Body("dates") dates: string[]): Promise<Map<string, Array<Schedule>>> {
         return await this.scheduleService.getByDates(dates, { relations });
     }
 

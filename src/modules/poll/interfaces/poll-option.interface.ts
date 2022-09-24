@@ -1,10 +1,20 @@
-export type PollOptionValue = string | number | boolean;
+export type PollOptionValue = string;
 
-export interface PollOptions {
-    options: PollOptionValue[];
-    themeClass: string;
+export interface VoteSelection {
+    name?: string;
+    values?: PollOptionValue[];
 }
 
-export interface PollOption {
-    option: PollOptionValue;
+export interface PollSelection extends VoteSelection {
+    label?: string;
+    multiple?: boolean;
+}
+
+export interface PollOptions {
+    selections?: PollSelection[];
+    themeClass?: string;
+}
+
+export interface VoteOptions {
+    selections?: VoteSelection[];
 }

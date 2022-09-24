@@ -16,7 +16,7 @@ import { CreatePollDto } from "../dtos";
 import { PollService } from "../services";
 import { Poll, PollVote } from "../entities";
 import { User } from "../../user/entities";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, IQueryError, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { JwtAuthGuard } from "../../../core/guards";
@@ -29,7 +29,7 @@ import { PollErrors } from "../responses/poll.error.responses";
 
 export const pollRelations = ["votes", "users", ...relations];
 
-@Controller(Prefix.POLL)
+@Controller(Endpoint.POLL)
 export class PollController {
     constructor(private pollService: PollService) {}
 
@@ -65,7 +65,15 @@ export class PollController {
     @UseGuards(JwtAuthGuard)
     @Get(":id")
     get(@Param("id", ParseIntPipe) id: number): Promise<Poll> {
-        return this.pollService.get(id);
+        return this.pollService.get(id, { relations: pollRelations });
+    }
+
+    @UseGuards(JwtAuthGuard, PermissionGuard)
+    @Roles(Permission.POLL_GET)
+    @UseGuards(JwtAuthGuard)
+    @Get("by-code/:code")
+    getByCode(@Param("code") code: string): Promise<Poll> {
+        return this.pollService.getOne({ code }, { relations: pollRelations });
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)

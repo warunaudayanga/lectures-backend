@@ -3,7 +3,7 @@ import { Role, User } from "../entities";
 import { PermissionGuard } from "../../../core/guards/permission.guard";
 import { RoleService } from "../services";
 import { CreateRoleDto, UpdateRolePermissionDto } from "../dtos";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
@@ -12,7 +12,7 @@ import { relations } from "../../../core/config";
 import { DefaultRoles } from "../enums/default-roles.enum";
 import { Not } from "typeorm";
 
-@Controller(Prefix.ROLE)
+@Controller(Endpoint.ROLE)
 export class RoleController {
     constructor(private roleService: RoleService) {}
 

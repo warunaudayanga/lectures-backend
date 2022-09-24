@@ -3,7 +3,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Schedule } from "../entities";
 import { EntityService, EntityUtils } from "../../../core/entity";
 import { ScheduleRepository } from "../repositories";
-import { DateOnly } from "../../../core/interfaces";
 import { FindManyOptions } from "typeorm";
 import { groupBy } from "../../../core/utils/common.utils";
 import * as moment from "moment";
@@ -12,18 +11,20 @@ import { TimetableService } from "./timetable.service";
 import { relations } from "../../../core/config";
 import { SaveScheduleListDto } from "../dtos/save-schedule-list.dto";
 import { User } from "../../user/entities";
+import { SocketService } from "../../../core/modules/socket/services/socket.service";
 
 @Injectable()
 export class ScheduleService extends EntityService<Schedule> {
     constructor(
         @InjectRepository(ScheduleRepository) private scheduleRepository: ScheduleRepository,
-        private timetableService: TimetableService,
+        protected readonly socketService: SocketService,
+        private readonly timetableService: TimetableService,
     ) {
-        super(scheduleRepository, "schedule", "date and slot");
+        super(socketService, scheduleRepository, "schedule", "date and slot");
     }
 
     async getByDate(
-        date: DateOnly,
+        date: string,
         options?: FindManyOptions<Schedule>,
     ): Promise<{ schedule: Schedule[]; generated: boolean }> {
         try {
@@ -58,7 +59,7 @@ export class ScheduleService extends EntityService<Schedule> {
         }
     }
 
-    async getByDates(dates: DateOnly[], options?: FindManyOptions<Schedule>): Promise<Map<DateOnly, Array<Schedule>>> {
+    async getByDates(dates: string[], options?: FindManyOptions<Schedule>): Promise<Map<string, Array<Schedule>>> {
         try {
             const schedules = await this.scheduleRepository.getByDates(dates, options);
             return groupBy(schedules, (entry) => entry.date);

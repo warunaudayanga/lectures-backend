@@ -4,13 +4,13 @@ import { AuthDataDto } from "../dtos";
 import { TokenData } from "../interfaces";
 import { User } from "../../user/entities";
 import { CreateUserDto } from "../../user/dtos";
-import { Prefix } from "../../../core/enums";
+import { Endpoint } from "../../../core/enums";
 import { JwtAuthGuard } from "../../../core/guards";
 import { ReqUser } from "../../../core/decorators";
 import { UpdatePasswordDto } from "../dtos/update-password.dto";
 import { IStatusResponse } from "../../../core/entity";
 
-@Controller(Prefix.AUTH)
+@Controller(Endpoint.AUTH)
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 

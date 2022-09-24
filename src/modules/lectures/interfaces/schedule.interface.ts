@@ -1,5 +1,4 @@
 import { IBaseEntity } from "../../../core/entity";
-import { DateOnly, Time } from "../../../core/interfaces";
 import { ITimetable } from "./timetable.interface";
 import { Day } from "../../../core/enums";
 import { ILecturer } from "./lecturer.interface";
@@ -13,14 +12,14 @@ export interface ISchedule extends IBaseEntity {
     lecturerL2?: ILecturer;
     day: Day;
     dayL2: Day;
-    date: DateOnly;
-    dateL2: DateOnly;
+    date: string;
+    dateL2: string;
     slot: number;
-    startAt: Time;
-    endAt: Time;
+    startAt: string;
+    endAt: string;
     slotL2?: number;
-    startAtL2?: Time;
-    endAtL2?: Time;
+    startAtL2?: string;
+    endAtL2?: string;
     meetingId?: string;
     passcode?: string;
     meetingUrl?: string;

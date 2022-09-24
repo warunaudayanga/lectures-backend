@@ -57,12 +57,12 @@ export class Poll implements IPoll {
     @ManyToMany(() => User, (user) => user.votedPolls)
     @JoinTable({
         name: "poll_voters",
-        joinColumn: { name: "userId" },
-        inverseJoinColumn: { name: "pollId" },
+        joinColumn: { name: "pollId" },
+        inverseJoinColumn: { name: "userId" },
     })
     users?: User[];
 
-    @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
+    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
     status: Status | string;
 
     @CreateDateColumn()

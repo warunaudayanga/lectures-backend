@@ -1,7 +1,6 @@
 import { IsNotEmpty, Matches } from "class-validator";
 import { BaseDto } from "../../../core/entity";
 import configuration from "../../../core/config/configuration";
-import { Time } from "../../../core/interfaces";
 
 export class CreateSlotDto extends BaseDto {
     @IsNotEmpty()
@@ -9,9 +8,9 @@ export class CreateSlotDto extends BaseDto {
 
     @Matches(configuration().regex.time)
     @IsNotEmpty()
-    startAt: Time;
+    startAt: string;
 
     @Matches(configuration().regex.time)
     @IsNotEmpty()
-    endAt: Time;
+    endAt: string;
 }

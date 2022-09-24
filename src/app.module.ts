@@ -12,6 +12,7 @@ import { SeedingModule } from "./modules/seeding/seeding.module";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { WebhookModule } from "./core/modules";
 import { PollModule } from "./modules/poll/poll.module";
+import { SocketModule } from "./core/modules/socket/socket.module";
 
 @Module({
     imports: [
@@ -39,6 +40,7 @@ import { PollModule } from "./modules/poll/poll.module";
         }),
         SeedingModule,
         AuthModule,
+        SocketModule,
         LecturesModule,
         PollModule,
     ],

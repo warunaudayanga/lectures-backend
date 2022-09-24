@@ -4,14 +4,14 @@ import { LecturerService } from "../services";
 import { Lecturer } from "../entities";
 import { CreateLecturerDto, UpdateLecturerDto } from "../dtos";
 import { User } from "../../user/entities";
-import { Permission, Prefix, Status, Title } from "../../../core/enums";
+import { Permission, Endpoint, Status, Title } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
 import { relations } from "../../../core/config";
 
-@Controller(Prefix.LECTURER)
+@Controller(Endpoint.LECTURER)
 export class LecturerController {
     constructor(private lecturerService: LecturerService) {}
 
