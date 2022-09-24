@@ -9,10 +9,12 @@ import { Operation } from "./entity.enums";
 import { EntityErrors } from "./entity.error.responses";
 import { relations } from "../config";
 import { User } from "../../modules/user/entities";
+import { SocketService } from "../modules/socket/services/socket.service";
 
 // noinspection JSUnusedGlobalSymbols
 export abstract class EntityService<Entity extends IBaseEntity> {
     protected constructor(
+        protected readonly socketService: SocketService,
         protected readonly repository: BaseRepository<Entity>,
         protected readonly entityName: string,
         protected readonly uniqueFieldName?: string,

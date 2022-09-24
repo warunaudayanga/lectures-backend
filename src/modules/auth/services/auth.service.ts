@@ -15,7 +15,7 @@ import { LoggerService } from "../../../core/services";
 import { EntityErrors, IQueryError, IStatusResponse } from "../../../core/entity";
 import { Status } from "../../../core/enums";
 import { DefaultRoles } from "../../user/enums/default-roles.enum";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import { Events } from "../../../core/modules/webhook/enums/events.enum";
 import { UpdatePasswordDto } from "../dtos/update-password.dto";
 
@@ -138,6 +138,7 @@ export class AuthService {
         });
     }
 
+    @OnEvent(Events.USER_GET_BY_TOKEN)
     public async getUserByToken(bearerToken: string): Promise<User> {
         try {
             const payload = this.verifyToken(bearerToken);

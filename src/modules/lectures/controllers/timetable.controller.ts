@@ -4,7 +4,7 @@ import { TimetableService } from "../services";
 import { Timetable } from "../entities";
 import { CreateTimetableDto } from "../dtos";
 import { User } from "../../user/entities";
-import { Day, Permission, Prefix } from "../../../core/enums";
+import { Day, Permission, Endpoint } from "../../../core/enums";
 import { IPaginatedResponse, IStatusResponse } from "../../../core/entity";
 import { ReqUser, Roles } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
@@ -14,7 +14,7 @@ import { SaveTimetableDto } from "../dtos/save-timetable.dto";
 
 const relations = ["course", "module", "lecturer", "lecturerL2", "slot", "slotL2", ...rel];
 
-@Controller(Prefix.TIMETABLE)
+@Controller(Endpoint.TIMETABLE)
 export class TimetableController {
     constructor(private timetableService: TimetableService) {}
 

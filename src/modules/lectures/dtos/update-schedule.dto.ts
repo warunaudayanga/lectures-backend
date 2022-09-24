@@ -1,6 +1,5 @@
 import { IsEnum, IsOptional, Matches } from "class-validator";
 import configuration from "../../../core/config/configuration";
-import { DateOnly } from "../../../core/interfaces";
 import { Lecturer, Timetable } from "../entities";
 import { Day } from "../../../core/enums";
 
@@ -20,7 +19,7 @@ export class UpdateScheduleDto {
 
     @Matches(configuration().regex.dateOnly)
     @IsOptional()
-    date?: DateOnly;
+    date?: string;
 
     @IsEnum(Object.values(Day))
     @IsOptional()
@@ -28,7 +27,7 @@ export class UpdateScheduleDto {
 
     @Matches(configuration().regex.dateOnly)
     @IsOptional()
-    dateL2?: DateOnly;
+    dateL2?: string;
 
     @IsOptional()
     slot?: number;

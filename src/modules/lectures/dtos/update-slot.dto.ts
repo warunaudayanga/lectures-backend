@@ -1,7 +1,6 @@
 import { IsOptional, Matches } from "class-validator";
 import { BaseDto } from "../../../core/entity";
 import configuration from "../../../core/config/configuration";
-import { Time } from "../../../core/interfaces";
 
 export class UpdateSlotDto extends BaseDto {
     @IsOptional()
@@ -9,9 +8,9 @@ export class UpdateSlotDto extends BaseDto {
 
     @Matches(configuration().regex.time)
     @IsOptional()
-    startAt?: Time;
+    startAt?: string;
 
     @Matches(configuration().regex.time)
     @IsOptional()
-    endAt?: Time;
+    endAt?: string;
 }

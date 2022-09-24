@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-export enum Prefix {
+export enum Endpoint {
     AUTH = "auth",
     ROLE = "role",
     USER = "user",

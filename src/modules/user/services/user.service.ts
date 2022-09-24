@@ -7,14 +7,16 @@ import { DeepPartial } from "typeorm/common/DeepPartial";
 import { SaveOptions } from "typeorm";
 import { CourseService } from "../../lectures/services";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import { SocketService } from "../../../core/modules/socket/services/socket.service";
 
 @Injectable()
 export class UserService extends EntityService<User> {
     constructor(
-        @InjectRepository(UserRepository) private userRepository: UserRepository,
-        private courseService: CourseService,
+        @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
+        protected readonly socketService: SocketService,
+        private readonly courseService: CourseService,
     ) {
-        super(userRepository, "user", "username");
+        super(socketService, userRepository, "user", "username");
     }
 
     async create<T extends DeepPartial<User>>(

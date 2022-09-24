@@ -4,7 +4,7 @@ import { CourseService } from "../services";
 import { Course } from "../entities";
 import { CreateCourseDto, UpdateCourseDto } from "../dtos";
 import { User } from "../../user/entities";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
@@ -12,7 +12,7 @@ import { JwtAuthGuard } from "../../../core/guards";
 import { relations } from "../../../core/config";
 import { CourseType } from "../enums";
 
-@Controller(Prefix.COURSE)
+@Controller(Endpoint.COURSE)
 export class CourseController {
     constructor(private courseService: CourseService) {}
 
