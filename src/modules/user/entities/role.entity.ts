@@ -38,7 +38,7 @@ export class Role implements IRole {
     createdAt: Date;
 
     @ManyToOne(() => User)
-    createdBy: User;
+    createdBy?: User;
 
     @UpdateDateColumn()
     updatedAt: Date;

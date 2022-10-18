@@ -8,7 +8,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
-import { Time } from "../../../core/interfaces";
 import { ISlot } from "../interfaces/slot.interface";
 import { Status } from "../../../core/enums";
 import { User } from "../../user/entities";
@@ -23,10 +22,10 @@ export class Slot implements ISlot {
     number: number;
 
     @Column("time", { nullable: false })
-    startAt: Time;
+    startAt: string;
 
     @Column("time", { nullable: false })
-    endAt: Time;
+    endAt: string;
 
     @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
     status: Status | string;
@@ -35,7 +34,7 @@ export class Slot implements ISlot {
     createdAt: Date;
 
     @ManyToOne(() => User)
-    createdBy: User;
+    createdBy?: User;
 
     @UpdateDateColumn()
     updatedAt: Date;

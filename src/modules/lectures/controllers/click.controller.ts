@@ -4,14 +4,14 @@ import { ClickService } from "../services";
 import { Click } from "../entities";
 import { CreateClickDto } from "../dtos";
 import { User } from "../../user/entities";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { JwtAuthGuard } from "../../../core/guards";
 
 const relations = ["createdBy", "schedule", "timetable"];
 
-@Controller(Prefix.CLICK)
+@Controller(Endpoint.CLICK)
 export class ClickController {
     constructor(private clickService: ClickService) {}
 

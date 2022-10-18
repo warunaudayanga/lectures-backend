@@ -39,6 +39,12 @@ export const toUpperCase = (str: string): string => {
         .join(" ");
 };
 
+export const toSentenceCase = (str: string): string => {
+    return breakToWords(str)
+        .map((s, i) => (i === 0 ? toFirstCase(s) : toLowerCase(s)))
+        .join(" ");
+};
+
 export const toNumber = (n: number | string): number => {
     return !isNaN(Number(n)) ? Number(n) : undefined;
 };

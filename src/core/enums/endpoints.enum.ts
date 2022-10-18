@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-export enum Prefix {
+export enum Endpoint {
     AUTH = "auth",
     ROLE = "role",
     USER = "user",
@@ -12,4 +12,5 @@ export enum Prefix {
     TIMETABLE = "timetable",
     SCHEDULE = "schedule",
     CLICK = "click",
+    POLL = "poll",
 }

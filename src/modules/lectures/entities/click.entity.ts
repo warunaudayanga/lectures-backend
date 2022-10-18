@@ -30,5 +30,5 @@ export class Click implements IClick {
     createdAt: Date;
 
     @ManyToOne(() => User)
-    createdBy: User;
+    createdBy?: User;
 }

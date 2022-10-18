@@ -8,7 +8,6 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 import { ISchedule } from "../interfaces";
-import { DateOnly, Time } from "../../../core/interfaces";
 import { Timetable } from "./timetable.entity";
 import { Day, Status } from "../../../core/enums";
 import { Lecturer } from "./lecturer.entity";
@@ -39,28 +38,28 @@ export class Schedule implements ISchedule {
     dayL2: Day;
 
     @Column("date", { nullable: false })
-    date: DateOnly;
+    date: string;
 
     @Column("date", { nullable: true })
-    dateL2: DateOnly;
+    dateL2: string;
 
     @Column()
     slot: number;
 
     @Column("time", { nullable: false })
-    startAt: Time;
+    startAt: string;
 
     @Column("time", { nullable: false })
-    endAt: Time;
+    endAt: string;
 
     @Column({ nullable: true })
     slotL2?: number;
 
     @Column("time", { nullable: true })
-    startAtL2?: Time;
+    startAtL2?: string;
 
     @Column("time", { nullable: true })
-    endAtL2?: Time;
+    endAtL2?: string;
 
     @Column({ nullable: true })
     meetingId?: string;
@@ -99,7 +98,7 @@ export class Schedule implements ISchedule {
     createdAt: Date;
 
     @ManyToOne(() => User)
-    createdBy: User;
+    createdBy?: User;
 
     @UpdateDateColumn()
     updatedAt: Date;

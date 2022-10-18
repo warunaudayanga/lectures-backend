@@ -3,7 +3,7 @@ import { BaseExceptionFilter } from "@nestjs/core";
 import { applyTemplate, toErrorObject } from "../converters";
 import { LoggerService } from "../services";
 import { Request } from "express";
-import { Prefix } from "../enums";
+import { Endpoint } from "../enums";
 import { EntityErrorResponse } from "../entity";
 
 @Catch()
@@ -12,7 +12,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         let ex: any = exception;
         let request = host.switchToHttp().getRequest<Request>();
         try {
-            const [, , prefix] = request.url.split("/") as [string, string, Prefix];
+            const [, , prefix] = request.url.split("/") as [string, string, Endpoint];
 
             let errObj = ex.response as EntityErrorResponse;
             if (ex.response.statusCode && Array.isArray(ex.response.message)) {

@@ -38,7 +38,7 @@ export interface IBaseEntity {
     id: number;
     status: Status | string;
     createdAt: Date;
-    createdBy: IUser;
+    createdBy?: IUser;
     updatedAt?: Date;
     updatedBy?: IUser;
     deletedAt?: Date;

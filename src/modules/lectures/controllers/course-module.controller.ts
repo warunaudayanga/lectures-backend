@@ -4,7 +4,7 @@ import { CreateCourseModuleDto, UpdateCourseModuleDto } from "../dtos";
 import { CourseModuleService } from "../services";
 import { CourseModule } from "../entities";
 import { User } from "../../user/entities";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
@@ -12,7 +12,7 @@ import { JwtAuthGuard } from "../../../core/guards";
 import { relations } from "../../../core/config";
 import { Department } from "../enums";
 
-@Controller(Prefix.COURSE_MODULE)
+@Controller(Endpoint.COURSE_MODULE)
 export class CourseModuleController {
     constructor(private moduleService: CourseModuleService) {}
 

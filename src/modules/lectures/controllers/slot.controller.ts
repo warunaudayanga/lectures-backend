@@ -4,14 +4,14 @@ import { CreateSlotDto, UpdateSlotDto } from "../dtos";
 import { SlotService } from "../services";
 import { CourseModule, Slot } from "../entities";
 import { User } from "../../user/entities";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
 import { JwtAuthGuard } from "../../../core/guards";
 import { relations } from "../../../core/config";
 
-@Controller(Prefix.SLOT)
+@Controller(Endpoint.SLOT)
 export class SlotController {
     constructor(private slotService: SlotService) {}
 

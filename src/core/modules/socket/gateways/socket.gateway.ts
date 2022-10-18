@@ -1,3 +1,5 @@
+// noinspection JSUnusedLocalSymbols
+
 import {
     OnGatewayConnection,
     OnGatewayDisconnect,
@@ -6,17 +8,17 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-import { UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../../../guards";
 import { SocketService } from "../services/socket.service";
+import { Gateway } from "../../../enums/gateways.enum";
 
-@UsePipes(new ValidationPipe({ transform: true }))
-@WebSocketGateway({ namespace: "chat" })
+@WebSocketGateway({ namespace: Gateway.MAIN })
 export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     private server: Server;
 
-    constructor(private readonly socket: SocketService) {}
+    constructor(private readonly socketService: SocketService) {}
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     afterInit(server: Server): void {
@@ -25,13 +27,13 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
     @UseGuards(JwtAuthGuard)
     async handleConnection(client: Socket): Promise<any> {
-        if (!(await this.socket.addClient(client))) {
+        if (!(await this.socketService.addClient(client))) {
             client.disconnect();
         }
     }
 
     handleDisconnect(client: Socket): any {
-        this.socket.removeClient(client);
+        this.socketService.removeClient(client);
     }
 
     // @SubscribeMessage(ChatEvent.MESSAGE)

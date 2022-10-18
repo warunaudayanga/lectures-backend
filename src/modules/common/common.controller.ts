@@ -3,12 +3,12 @@ import { Response as ExpressResponse } from "express";
 import { createReadStream } from "fs";
 import { join } from "path";
 import configuration from "../../core/config/configuration";
-import { Prefix } from "../../core/enums";
+import { Endpoint } from "../../core/enums";
 import { CommonErrors } from "../../core/responses";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Events } from "../../core/modules/webhook/enums/events.enum";
 
-@Controller(Prefix.COMMON)
+@Controller(Endpoint.COMMON)
 export class CommonController {
     constructor(private readonly eventEmitter: EventEmitter2) {}
 

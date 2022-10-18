@@ -3,7 +3,7 @@ import { User } from "../entities";
 import { CreateUserDto, UpdateUserDto, UpdateUserRoleDto } from "../dtos";
 import { RoleService, UserService } from "../services";
 import { PermissionGuard } from "../../../core/guards/permission.guard";
-import { Permission, Prefix, Status } from "../../../core/enums";
+import { Permission, Endpoint, Status } from "../../../core/enums";
 import { IPaginatedResponse, IPagination, ISort, IStatusResponse } from "../../../core/entity";
 import { Pager, ReqUser, Roles, Sorter } from "../../../core/decorators";
 import { BulkDeleteDto, UpdateStatusDto } from "../../../core/dtos";
@@ -14,7 +14,7 @@ import { Not } from "typeorm";
 import { AuthService } from "../../auth/services";
 import { UpdateMeDto } from "../dtos/update-me.dto";
 
-@Controller(Prefix.USER)
+@Controller(Endpoint.USER)
 export class UserController {
     constructor(
         private readonly authService: AuthService,
@@ -26,6 +26,13 @@ export class UserController {
     @Get("me")
     getMe(@ReqUser() user: User): Promise<User> {
         return this.get(user.id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get("count")
+    async getCount(): Promise<number> {
+        let { rowCount } = await this.userService.getMany({ deletedAt: null });
+        return rowCount;
     }
 
     @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -47,7 +54,7 @@ export class UserController {
         const role = await this.roleService.getOne({ name: DefaultRoles.SUPER_ADMIN });
         const where = status ? { status } : {};
         return this.userService.getMany(
-            { ...where, role: Not(role.id) },
+            { ...where, role: Not(role.id), deletedAt: null },
             { ...pagination, ...sort, filter: { keyword, fields: ["name", "username", "studentIdString"] } },
             { relations: ["role", "course", ...relations] },
         );

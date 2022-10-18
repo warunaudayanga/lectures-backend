@@ -35,5 +35,5 @@ export class CreateTimetableEntryDto {
     documentsUrlL2?: string;
 
     @IsEmpty()
-    createdBy: User;
+    createdBy?: User;
 }

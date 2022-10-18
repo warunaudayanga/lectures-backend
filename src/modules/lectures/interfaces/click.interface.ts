@@ -1,11 +1,11 @@
 import { IBaseEntity } from "../../../core/entity";
 import { ButtonType, ClickType } from "../enums";
-import { Schedule, Timetable } from "../entities";
+import { ISchedule } from "./schedule.interface";
+import { ITimetable } from "./timetable.interface";
 
 export interface IClick extends IBaseEntity {
-    id: number;
     type: ClickType;
     button: ButtonType;
-    schedule?: Schedule;
-    timetable?: Timetable;
+    schedule?: ISchedule;
+    timetable?: ITimetable;
 }

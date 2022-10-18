@@ -3,6 +3,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
     Unique,
@@ -13,6 +14,7 @@ import { Role } from "./role.entity";
 import { IUser } from "../interfaces";
 import { Course } from "../../lectures/entities";
 import { Status } from "../../../core/enums";
+import { Poll } from "../../poll/entities";
 
 @Unique("COURSE_STUDENT_ID", ["course", "studentId"])
 @Unique("USERNAME", ["username"])
@@ -74,6 +76,9 @@ export class User implements IUser {
     @Column()
     studentIdString: string;
 
+    @ManyToMany(() => Poll, (poll) => poll.users)
+    votedPolls: Poll[];
+
     @Column({ type: "enum", enum: Status, default: Status.INACTIVE })
     status: Status | string;
 
@@ -82,7 +87,7 @@ export class User implements IUser {
 
     @ManyToOne(() => User)
     // eslint-disable-next-line no-use-before-define
-    createdBy: User;
+    createdBy?: User;
 
     @UpdateDateColumn()
     updatedAt: Date;

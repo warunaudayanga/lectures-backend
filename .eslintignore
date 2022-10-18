@@ -3,3 +3,10 @@
 README.md
 errors.json
 /migrations
+/id_rsa
+/id_rsa.pub
+/.env.bak
+/lectures-prod_2022-08-01_1805h.sql
+/output.pdf
+/template.html
+/temp.json
