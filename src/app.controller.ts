@@ -1,11 +1,18 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, HttpCode } from "@nestjs/common";
 
 @Controller()
 export class AppController {
-    constructor() {}
-
-    @Get("/health")
-    health(): { status: "UP" } {
-        return { status: "UP" };
+    @Get(["", "health", "status"])
+    @HttpCode(200)
+    health(): {
+        status: string;
+        message: string;
+        version: string;
+    } {
+        return {
+            status: "ok",
+            message: "API is running",
+            version: "1.0.0",
+        };
     }
 }
